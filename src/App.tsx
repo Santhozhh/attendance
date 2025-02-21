@@ -84,7 +84,7 @@ ${getList("Absent")}
       <div className="h-96 overflow-hidden border rounded-2xl mt-5 bg-gradient-to-br from-blue-950 to-blue-300 text-white">
         <div className="overflow-y-auto h-full">
           <table className="min-w-full h-full table-auto">
-            <thead>
+            <thead className="sticky top-0 bg-blue-500 z-10">
               <tr>
                 <th className="border-2 px-4 py-2">S No</th>
                 <th className="border-2 px-4 py-2">Student Name</th>
