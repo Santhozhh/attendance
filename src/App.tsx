@@ -27,7 +27,9 @@ const App = () => {
 
   // Count attendance categories
   const totalStudents = students.length;
-  const presentCount = Object.values(attendance).filter((a) => a === "Present").length;
+  const presentCount = Object.values(attendance).filter(
+    (a) => a === "Present" || a === "On Duty" || a === "Late"
+  ).length;
   const leaveCount = Object.values(attendance).filter((a) => a === "Leave").length;
   const odCount = Object.values(attendance).filter((a) => a === "On Duty").length;
   const lateCount = Object.values(attendance).filter((a) => a === "Late").length;
@@ -76,77 +78,107 @@ ${getList("Absent")}
   };
 
   return (
-    <div className="h-screen w-full p-4 bg-gradient-to-br from-green-600 to-blue-600">
-      <div className="bg-gradient-to-r from-blue-400 to-blue-950 p-3 rounded-2xl flex items-center justify-center h-17">
-        <h1 className="text-2xl font-bold text-white">Attendance III-C</h1>
+    <div className="min-h-screen w-full p-6 bg-[#0a0a0a]">
+      {/* Header Section */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent 
+          drop-shadow-[0_0_10px_rgba(236,72,153,0.3)] mb-2">
+          Attendance Management III-C
+        </h1>
+        <p className="text-gray-400 text-lg">Your gateway to student attendance tracking</p>
       </div>
 
-      <div className="h-96 overflow-hidden border rounded-2xl mt-5 bg-gradient-to-br from-blue-950 to-blue-300 text-white">
+      {/* Table Section */}
+      <div className="h-[28rem] overflow-hidden rounded-xl shadow-2xl bg-black/40 
+        border border-pink-500/20 shadow-pink-500/10">
         <div className="overflow-y-auto h-full">
           <table className="min-w-full h-full table-auto">
-            <thead className="sticky top-0 bg-blue-500 z-10">
-              <tr>
-                <th className="border-2 px-4 py-2">S No</th>
-                <th className="border-2 px-4 py-2">Student Name</th>
-                <th className="border-2 px-4 py-2">Roll No</th>
-                <th className="border-2 px-4 py-2">Reg No</th>
-                <th className="border-2 px-4 py-2">Present</th>
-                <th className="border-2 px-4 py-2">Absent</th>
-                <th className="border-2 px-4 py-2">Leave</th>
-                <th className="border-2 px-4 py-2">On Duty</th>
-                <th className="border-2 px-4 py-2">Late</th>
+            <thead className="sticky top-0 bg-gradient-to-r from-pink-900/90 via-purple-900/90 to-pink-900/90 z-10">
+              <tr className="border-b border-pink-500/30">
+                <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  S No
+                </th>
+                <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  Student Name
+                </th>
+                <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  Roll No
+                </th>
+                <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  Reg No
+                </th>
+                <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  Present
+                </th>
+                <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  Absent
+                </th>
+                <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  Leave
+                </th>
+                <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  On Duty
+                </th>
+                <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  Late
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-pink-500/20">
               {students.map((student: any, index) => (
-                <tr key={index} className="text-center">
-                  <td className="border-2 p-2">{student.SNo}</td>
-                  <td className="border-2 p-2">{student.Name}</td>
-                  <td className="border-2 p-2">{student.RollNo}</td>
-                  <td className="border-2 p-2">{student.RegNo}</td>
-                  <td className="border-2 p-2">
+                <tr key={index} className="text-center hover:bg-pink-500/5 transition-colors">
+                  <td className="border-b border-pink-500/20 p-2 text-gray-300">{student.SNo}</td>
+                  <td className="border-b border-pink-500/20 p-2 text-gray-300">{student.Name}</td>
+                  <td className="border-b border-pink-500/20 p-2 text-gray-300">{student.RollNo}</td>
+                  <td className="border-b border-pink-500/20 p-2 text-gray-300">{student.RegNo}</td>
+                  <td className="border-b border-pink-500/20 p-2">
                     <input
                       type="radio"
                       name={`attendance-${student.SNo}`}
                       value="Present"
                       checked={attendance[student.SNo] === "Present"}
                       onChange={() => handleAttendanceChange(student.SNo, "Present")}
+                      className="w-4 h-4 accent-pink-500 cursor-pointer"
                     />
                   </td>
-                  <td className="border-2 p-2">
+                  <td className="border-b border-pink-500/20 p-2">
                     <input
                       type="radio"
                       name={`attendance-${student.SNo}`}
                       value="Absent"
                       checked={attendance[student.SNo] === "Absent"}
                       onChange={() => handleAttendanceChange(student.SNo, "Absent")}
+                      className="w-4 h-4 accent-pink-500 cursor-pointer"
                     />
                   </td>
-                  <td className="border-2 p-2">
+                  <td className="border-b border-pink-500/20 p-2">
                     <input
                       type="radio"
                       name={`attendance-${student.SNo}`}
                       value="Leave"
                       checked={attendance[student.SNo] === "Leave"}
                       onChange={() => handleAttendanceChange(student.SNo, "Leave")}
+                      className="w-4 h-4 accent-pink-500 cursor-pointer"
                     />
                   </td>
-                  <td className="border-2 p-2">
+                  <td className="border-b border-pink-500/20 p-2">
                     <input
                       type="radio"
                       name={`attendance-${student.SNo}`}
                       value="On Duty"
                       checked={attendance[student.SNo] === "On Duty"}
                       onChange={() => handleAttendanceChange(student.SNo, "On Duty")}
+                      className="w-4 h-4 accent-pink-500 cursor-pointer"
                     />
                   </td>
-                  <td className="border-2 p-2">
+                  <td className="border-b border-pink-500/20 p-2">
                     <input
                       type="radio"
                       name={`attendance-${student.SNo}`}
                       value="Late"
                       checked={attendance[student.SNo] === "Late"}
                       onChange={() => handleAttendanceChange(student.SNo, "Late")}
+                      className="w-4 h-4 accent-pink-500 cursor-pointer"
                     />
                   </td>
                 </tr>
@@ -157,16 +189,25 @@ ${getList("Absent")}
       </div>
 
       {/* Attendance Summary Section */}
-      <div className="mt-6 p-4 bg-white rounded-lg shadow-md text-black">
-        <h2 className="text-xl font-bold mb-2">Attendance Summary</h2>
-        <pre className="bg-gray-200 p-2 rounded">{attendanceSummary}</pre>
+      <div className="mt-6 p-6 bg-black/40 rounded-xl shadow-2xl border border-pink-500/20 text-gray-300
+        shadow-pink-500/10">
+        <h2 className="text-2xl font-bold mb-4 text-pink-500">Attendance Summary</h2>
+        <pre className="bg-black/60 p-4 rounded-lg font-mono text-sm border border-pink-500/20">{attendanceSummary}</pre>
 
-        <div className="flex gap-4 mt-4">
-          <button onClick={copyToClipboard} className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
-            Copy
+        <div className="flex gap-4 mt-6">
+          <button 
+            onClick={copyToClipboard} 
+            className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2.5 rounded-lg 
+              shadow-lg hover:shadow-pink-500/50 transition-all duration-200 flex items-center gap-2"
+          >
+            <span>Copy Summary</span>
           </button>
-          <button onClick={shareOnWhatsApp} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-            Share on WhatsApp
+          <button 
+            onClick={shareOnWhatsApp} 
+            className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2.5 rounded-lg 
+              shadow-lg hover:shadow-purple-500/50 transition-all duration-200 flex items-center gap-2"
+          >
+            <span>Share on WhatsApp</span>
           </button>
         </div>
       </div>
