@@ -73,7 +73,7 @@ NIL
   };
 
   return (
-    <div className="h-screen w-full p-4 bg-gradient-to-br from-green-600 to-blue-600">
+    <div className="h-screen w-full p-4 bg-gradient-to-br from-pink-600 to-blue-900">
       <div className="bg-gradient-to-r from-blue-400 to-blue-950 p-3 rounded-2xl flex items-center justify-center h-17">
         <h1 className="text-2xl font-bold text-white">Attendance III-C</h1>
       </div>
