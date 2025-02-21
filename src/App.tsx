@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./App.css";
+import "./app.css";
 
 const App = () => {
   const [students, setStudents] = useState([]);
@@ -13,7 +13,7 @@ const App = () => {
         setStudents(data);
         const initialAttendance: { [key: string]: string } = {};
         data.forEach((student: any) => {
-          initialAttendance[student.SNo] = "Present"; // Default: Present
+          initialAttendance[student.SNo] = "Present"; // Default status
         });
         setAttendance(initialAttendance);
         setDate(new Date().toLocaleDateString("en-GB")); // Set today's date (DD/MM/YYYY)
@@ -25,47 +25,50 @@ const App = () => {
     setAttendance((prev) => ({ ...prev, [sno]: status }));
   };
 
-  // Count total attendance stats
+  // Count attendance categories
   const totalStudents = students.length;
   const presentCount = Object.values(attendance).filter((a) => a === "Present").length;
   const leaveCount = Object.values(attendance).filter((a) => a === "Leave").length;
   const odCount = Object.values(attendance).filter((a) => a === "On Duty").length;
+  const lateCount = Object.values(attendance).filter((a) => a === "Late").length;
   const absentCount = Object.values(attendance).filter((a) => a === "Absent").length;
 
   // Filter students by category
-  const leaveList = students.filter((s: any) => attendance[s.SNo] === "Leave");
-  const odList = students.filter((s: any) => attendance[s.SNo] === "On Duty");
-  const absentList = students.filter((s: any) => attendance[s.SNo] === "Absent");
+  const getList = (status: string) =>
+    students
+      .filter((s: any) => attendance[s.SNo] === status)
+      .map((s: any) => `(${s.RollNo}) ${s.Name}`)
+      .join("\n") || "NIL";
 
-  // Generate Attendance Summary as Text
+  // Attendance Summary
   const attendanceSummary = `
 ${date}
 PRESENT: ${presentCount}/${totalStudents}
 LEAVE: ${leaveCount}
 ON DUTY: ${odCount}
+LATE: ${lateCount}
 ABSENT: ${absentCount}
-LATE: 0
 
 LEAVE
-${leaveList.length > 0 ? leaveList.map((s: any) => `(${s.RollNo}) ${s.Name}`).join("\n") : "NIL"}
+${getList("Leave")}
 
 ON DUTY
-${odList.length > 0 ? odList.map((s: any) => `(${s.RollNo}) ${s.Name}`).join("\n") : "NIL"}
-
-ABSENT
-${absentList.length > 0 ? absentList.map((s: any) => `(${s.RollNo}) ${s.Name}`).join("\n") : "NIL"}
+${getList("On Duty")}
 
 LATE
-NIL
+${getList("Late")}
+
+ABSENT
+${getList("Absent")}
   `;
 
-  // Copy to Clipboard Function
+  // Copy to Clipboard
   const copyToClipboard = () => {
     navigator.clipboard.writeText(attendanceSummary);
-    alert("Attendance copied to clipboard!");
+    alert("Attendance summary copied to clipboard!");
   };
 
-  // Share on WhatsApp Function
+  // Share on WhatsApp
   const shareOnWhatsApp = () => {
     const whatsappMessage = encodeURIComponent(attendanceSummary);
     const whatsappURL = `https://wa.me/?text=${whatsappMessage}`;
@@ -73,7 +76,7 @@ NIL
   };
 
   return (
-    <div className="h-screen w-full p-4 bg-gradient-to-br from-pink-600 to-blue-900">
+    <div className="h-screen w-full p-4 bg-gradient-to-br from-green-600 to-blue-600">
       <div className="bg-gradient-to-r from-blue-400 to-blue-950 p-3 rounded-2xl flex items-center justify-center h-17">
         <h1 className="text-2xl font-bold text-white">Attendance III-C</h1>
       </div>
@@ -91,6 +94,7 @@ NIL
                 <th className="border-2 px-4 py-2">Absent</th>
                 <th className="border-2 px-4 py-2">Leave</th>
                 <th className="border-2 px-4 py-2">On Duty</th>
+                <th className="border-2 px-4 py-2">Late</th>
               </tr>
             </thead>
             <tbody>
@@ -100,18 +104,51 @@ NIL
                   <td className="border-2 p-2">{student.Name}</td>
                   <td className="border-2 p-2">{student.RollNo}</td>
                   <td className="border-2 p-2">{student.RegNo}</td>
-                  {/* Radio Buttons for Attendance */}
-                  {["Present", "Absent", "Leave", "On Duty"].map((status) => (
-                    <td key={status} className="border-2 p-2">
-                      <input
-                        type="radio"
-                        name={`attendance-${student.SNo}`}
-                        value={status}
-                        checked={attendance[student.SNo] === status}
-                        onChange={() => handleAttendanceChange(student.SNo, status)}
-                      />
-                    </td>
-                  ))}
+                  <td className="border-2 p-2">
+                    <input
+                      type="radio"
+                      name={`attendance-${student.SNo}`}
+                      value="Present"
+                      checked={attendance[student.SNo] === "Present"}
+                      onChange={() => handleAttendanceChange(student.SNo, "Present")}
+                    />
+                  </td>
+                  <td className="border-2 p-2">
+                    <input
+                      type="radio"
+                      name={`attendance-${student.SNo}`}
+                      value="Absent"
+                      checked={attendance[student.SNo] === "Absent"}
+                      onChange={() => handleAttendanceChange(student.SNo, "Absent")}
+                    />
+                  </td>
+                  <td className="border-2 p-2">
+                    <input
+                      type="radio"
+                      name={`attendance-${student.SNo}`}
+                      value="Leave"
+                      checked={attendance[student.SNo] === "Leave"}
+                      onChange={() => handleAttendanceChange(student.SNo, "Leave")}
+                    />
+                  </td>
+                  <td className="border-2 p-2">
+                    <input
+                      type="radio"
+                      name={`attendance-${student.SNo}`}
+                      value="On Duty"
+                      checked={attendance[student.SNo] === "On Duty"}
+                      onChange={() => handleAttendanceChange(student.SNo, "On Duty")}
+                    />
+                  </td>
+                  <td className="border-2 p-2">
+                    <input
+                      type="radio"
+                      name={`attendance-${student.SNo}`}
+                      value="Late"
+                      checked={attendance[student.SNo] === "Late"}
+                      onChange={() => handleAttendanceChange(student.SNo, "Late")}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -120,57 +157,15 @@ NIL
       </div>
 
       {/* Attendance Summary Section */}
-      <div className="mt-6 bg-white p-4 rounded-2xl shadow-lg">
-        <h2 className="text-lg font-bold mb-2">Attendance Summary - {date}</h2>
-        <p>PRESENT: {presentCount}/{totalStudents}</p>
-        <p>LEAVE: {leaveCount}</p>
-        <p>ON DUTY: {odCount}</p>
-        <p>ABSENT: {absentCount}</p>
-        <p>LATE: 0</p>
+      <div className="mt-6 p-4 bg-white rounded-lg shadow-md text-black">
+        <h2 className="text-xl font-bold mb-2">Attendance Summary</h2>
+        <pre className="bg-gray-200 p-2 rounded">{attendanceSummary}</pre>
 
-        {/* Display student lists */}
-        <div className="mt-4">
-          {leaveList.length > 0 && (
-            <div>
-              <h3 className="font-bold text-red-600">LEAVE</h3>
-              {leaveList.map((s: any) => (
-                <p key={s.SNo}>( {s.RollNo} ) {s.Name}</p>
-              ))}
-            </div>
-          )}
-          {odList.length > 0 && (
-            <div>
-              <h3 className="font-bold text-blue-600">ON DUTY</h3>
-              {odList.map((s: any) => (
-                <p key={s.SNo}>( {s.RollNo} ) {s.Name}</p>
-              ))}
-            </div>
-          )}
-          {absentList.length > 0 ? (
-            <div>
-              <h3 className="font-bold text-orange-600">ABSENT</h3>
-              {absentList.map((s: any) => (
-                <p key={s.SNo}>{s.Name}</p>
-              ))}
-            </div>
-          ) : (
-            <p className="font-bold text-green-600">ABSENT: NIL</p>
-          )}
-          <p className="font-bold text-green-600">LATE: NIL</p>
-        </div>
-
-        {/* Copy and Share Buttons */}
         <div className="flex gap-4 mt-4">
-          <button
-            onClick={copyToClipboard}
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-          >
+          <button onClick={copyToClipboard} className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
             Copy
           </button>
-          <button
-            onClick={shareOnWhatsApp}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          >
+          <button onClick={shareOnWhatsApp} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
             Share on WhatsApp
           </button>
         </div>
