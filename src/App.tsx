@@ -130,7 +130,7 @@ ${getList("Absent")}
                     S No
                   </th>
                   <th className="px-4 py-4 text-pink-200 font-bold tracking-wider whitespace-nowrap sticky left-0 
-                    bg-gradient-to-r from-pink-900 to-purple-900 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.3)]">
+                    bg-gradient-to-r from-pink-900 via-purple-900 to-pink-900">
                     Student Name
                   </th>
                   <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
@@ -161,110 +161,65 @@ ${getList("Absent")}
                   <tr key={index} className="text-center hover:bg-gray-700 transition-colors">
                     <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.SNo}</td>
                     <td className="border-b border-pink-500/20 p-2 text-gray-200 sticky left-0 
-                      bg-gray-800 whitespace-nowrap font-medium z-10 shadow-[2px_0_5px_rgba(0,0,0,0.3)]">
+                      bg-gray-800 whitespace-nowrap font-medium">
                       {student.Name}
                     </td>
                     <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.RollNo}</td>
                     <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.RegNo}</td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <label className="relative cursor-pointer flex justify-center">
-                        <input
-                          type="radio"
-                          name={`attendance-${student.SNo}`}
-                          value="Present"
-                          checked={attendance[student.SNo] === "Present"}
-                          onChange={() => handleAttendanceChange(student.SNo, "Present")}
-                          className="peer sr-only"
-                        />
-                        <div className="w-11 h-6 bg-gray-700 rounded-full 
-                          peer-checked:bg-green-500/30 transition-all duration-300">
-                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
-                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
-                            peer-checked:translate-x-5 peer-checked:bg-green-400
-                            group-hover:shadow-[0_0_8px_rgba(34,197,94,0.4)]">
-                          </div>
-                        </div>
-                      </label>
+                      <button
+                        onClick={() => handleAttendanceChange(student.SNo, "Present")}
+                        className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
+                          ${attendance[student.SNo] === "Present" 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-gray-700 text-gray-400'}`}
+                      >
+                        Present
+                      </button>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <label className="relative cursor-pointer flex justify-center">
-                        <input
-                          type="radio"
-                          name={`attendance-${student.SNo}`}
-                          value="Absent"
-                          checked={attendance[student.SNo] === "Absent"}
-                          onChange={() => handleAttendanceChange(student.SNo, "Absent")}
-                          className="peer sr-only"
-                        />
-                        <div className="w-11 h-6 bg-gray-700 rounded-full 
-                          peer-checked:bg-red-500/30 transition-all duration-300">
-                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
-                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
-                            peer-checked:translate-x-5 peer-checked:bg-red-400
-                            group-hover:shadow-[0_0_8px_rgba(239,68,68,0.4)]">
-                          </div>
-                        </div>
-                      </label>
+                      <button
+                        onClick={() => handleAttendanceChange(student.SNo, "Absent")}
+                        className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
+                          ${attendance[student.SNo] === "Absent" 
+                            ? 'bg-red-500 text-white' 
+                            : 'bg-gray-700 text-gray-400'}`}
+                      >
+                        Absent
+                      </button>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <label className="relative cursor-pointer flex justify-center">
-                        <input
-                          type="radio"
-                          name={`attendance-${student.SNo}`}
-                          value="Leave"
-                          checked={attendance[student.SNo] === "Leave"}
-                          onChange={() => handleAttendanceChange(student.SNo, "Leave")}
-                          className="peer sr-only"
-                        />
-                        <div className="w-11 h-6 bg-gray-700 rounded-full 
-                          peer-checked:bg-yellow-500/30 transition-all duration-300">
-                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
-                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
-                            peer-checked:translate-x-5 peer-checked:bg-yellow-400
-                            group-hover:shadow-[0_0_8px_rgba(234,179,8,0.4)]">
-                          </div>
-                        </div>
-                      </label>
+                      <button
+                        onClick={() => handleAttendanceChange(student.SNo, "Leave")}
+                        className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
+                          ${attendance[student.SNo] === "Leave" 
+                            ? 'bg-yellow-500 text-white' 
+                            : 'bg-gray-700 text-gray-400'}`}
+                      >
+                        Leave
+                      </button>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <label className="relative cursor-pointer flex justify-center">
-                        <input
-                          type="radio"
-                          name={`attendance-${student.SNo}`}
-                          value="On Duty"
-                          checked={attendance[student.SNo] === "On Duty"}
-                          onChange={() => handleAttendanceChange(student.SNo, "On Duty")}
-                          className="peer sr-only"
-                        />
-                        <div className="w-11 h-6 bg-gray-700 rounded-full 
-                          peer-checked:bg-purple-500/30 transition-all duration-300">
-                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
-                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
-                            peer-checked:translate-x-5 peer-checked:bg-purple-400
-                            group-hover:shadow-[0_0_8px_rgba(168,85,247,0.4)]">
-                          </div>
-                        </div>
-                      </label>
+                      <button
+                        onClick={() => handleAttendanceChange(student.SNo, "On Duty")}
+                        className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
+                          ${attendance[student.SNo] === "On Duty" 
+                            ? 'bg-purple-500 text-white' 
+                            : 'bg-gray-700 text-gray-400'}`}
+                      >
+                        On Duty
+                      </button>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <label className="relative cursor-pointer flex justify-center">
-                        <input
-                          type="radio"
-                          name={`attendance-${student.SNo}`}
-                          value="Late"
-                          checked={attendance[student.SNo] === "Late"}
-                          onChange={() => handleAttendanceChange(student.SNo, "Late")}
-                          className="peer sr-only"
-                        />
-                        <div className="w-11 h-6 bg-gray-700 rounded-full 
-                          peer-checked:bg-orange-500/30 transition-all duration-300">
-                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
-                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
-                            peer-checked:translate-x-5 peer-checked:bg-orange-400
-                            group-hover:shadow-[0_0_8px_rgba(249,115,22,0.4)]">
-                          </div>
-                        </div>
-                      </label>
+                      <button
+                        onClick={() => handleAttendanceChange(student.SNo, "Late")}
+                        className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
+                          ${attendance[student.SNo] === "Late" 
+                            ? 'bg-orange-500 text-white' 
+                            : 'bg-gray-700 text-gray-400'}`}
+                      >
+                        Late
+                      </button>
                     </td>
                   </tr>
                 ))}
