@@ -130,7 +130,7 @@ ${getList("Absent")}
                     S No
                   </th>
                   <th className="px-4 py-4 text-pink-200 font-bold tracking-wider whitespace-nowrap sticky left-0 
-                    bg-gradient-to-r from-pink-900 via-purple-900 to-pink-900">
+                    bg-gradient-to-r from-pink-900 to-purple-900 z-20 shadow-[2px_0_5px_rgba(0,0,0,0.3)]">
                     Student Name
                   </th>
                   <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
@@ -161,7 +161,7 @@ ${getList("Absent")}
                   <tr key={index} className="text-center hover:bg-gray-700 transition-colors">
                     <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.SNo}</td>
                     <td className="border-b border-pink-500/20 p-2 text-gray-200 sticky left-0 
-                      bg-gray-800 whitespace-nowrap font-medium">
+                      bg-gray-800 whitespace-nowrap font-medium z-10 shadow-[2px_0_5px_rgba(0,0,0,0.3)]">
                       {student.Name}
                     </td>
                     <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.RollNo}</td>
