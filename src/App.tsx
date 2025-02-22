@@ -167,54 +167,104 @@ ${getList("Absent")}
                     <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.RollNo}</td>
                     <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.RegNo}</td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <input
-                        type="radio"
-                        name={`attendance-${student.SNo}`}
-                        value="Present"
-                        checked={attendance[student.SNo] === "Present"}
-                        onChange={() => handleAttendanceChange(student.SNo, "Present")}
-                        className="w-4 h-4 accent-pink-500 cursor-pointer"
-                      />
+                      <label className="relative cursor-pointer flex justify-center">
+                        <input
+                          type="radio"
+                          name={`attendance-${student.SNo}`}
+                          value="Present"
+                          checked={attendance[student.SNo] === "Present"}
+                          onChange={() => handleAttendanceChange(student.SNo, "Present")}
+                          className="peer sr-only"
+                        />
+                        <div className="w-11 h-6 bg-gray-700 rounded-full 
+                          peer-checked:bg-green-500/30 transition-all duration-300">
+                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
+                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
+                            peer-checked:translate-x-5 peer-checked:bg-green-400
+                            group-hover:shadow-[0_0_8px_rgba(34,197,94,0.4)]">
+                          </div>
+                        </div>
+                      </label>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <input
-                        type="radio"
-                        name={`attendance-${student.SNo}`}
-                        value="Absent"
-                        checked={attendance[student.SNo] === "Absent"}
-                        onChange={() => handleAttendanceChange(student.SNo, "Absent")}
-                        className="w-4 h-4 accent-pink-500 cursor-pointer"
-                      />
+                      <label className="relative cursor-pointer flex justify-center">
+                        <input
+                          type="radio"
+                          name={`attendance-${student.SNo}`}
+                          value="Absent"
+                          checked={attendance[student.SNo] === "Absent"}
+                          onChange={() => handleAttendanceChange(student.SNo, "Absent")}
+                          className="peer sr-only"
+                        />
+                        <div className="w-11 h-6 bg-gray-700 rounded-full 
+                          peer-checked:bg-red-500/30 transition-all duration-300">
+                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
+                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
+                            peer-checked:translate-x-5 peer-checked:bg-red-400
+                            group-hover:shadow-[0_0_8px_rgba(239,68,68,0.4)]">
+                          </div>
+                        </div>
+                      </label>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <input
-                        type="radio"
-                        name={`attendance-${student.SNo}`}
-                        value="Leave"
-                        checked={attendance[student.SNo] === "Leave"}
-                        onChange={() => handleAttendanceChange(student.SNo, "Leave")}
-                        className="w-4 h-4 accent-pink-500 cursor-pointer"
-                      />
+                      <label className="relative cursor-pointer flex justify-center">
+                        <input
+                          type="radio"
+                          name={`attendance-${student.SNo}`}
+                          value="Leave"
+                          checked={attendance[student.SNo] === "Leave"}
+                          onChange={() => handleAttendanceChange(student.SNo, "Leave")}
+                          className="peer sr-only"
+                        />
+                        <div className="w-11 h-6 bg-gray-700 rounded-full 
+                          peer-checked:bg-yellow-500/30 transition-all duration-300">
+                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
+                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
+                            peer-checked:translate-x-5 peer-checked:bg-yellow-400
+                            group-hover:shadow-[0_0_8px_rgba(234,179,8,0.4)]">
+                          </div>
+                        </div>
+                      </label>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <input
-                        type="radio"
-                        name={`attendance-${student.SNo}`}
-                        value="On Duty"
-                        checked={attendance[student.SNo] === "On Duty"}
-                        onChange={() => handleAttendanceChange(student.SNo, "On Duty")}
-                        className="w-4 h-4 accent-pink-500 cursor-pointer"
-                      />
+                      <label className="relative cursor-pointer flex justify-center">
+                        <input
+                          type="radio"
+                          name={`attendance-${student.SNo}`}
+                          value="On Duty"
+                          checked={attendance[student.SNo] === "On Duty"}
+                          onChange={() => handleAttendanceChange(student.SNo, "On Duty")}
+                          className="peer sr-only"
+                        />
+                        <div className="w-11 h-6 bg-gray-700 rounded-full 
+                          peer-checked:bg-purple-500/30 transition-all duration-300">
+                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
+                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
+                            peer-checked:translate-x-5 peer-checked:bg-purple-400
+                            group-hover:shadow-[0_0_8px_rgba(168,85,247,0.4)]">
+                          </div>
+                        </div>
+                      </label>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
-                      <input
-                        type="radio"
-                        name={`attendance-${student.SNo}`}
-                        value="Late"
-                        checked={attendance[student.SNo] === "Late"}
-                        onChange={() => handleAttendanceChange(student.SNo, "Late")}
-                        className="w-4 h-4 accent-pink-500 cursor-pointer"
-                      />
+                      <label className="relative cursor-pointer flex justify-center">
+                        <input
+                          type="radio"
+                          name={`attendance-${student.SNo}`}
+                          value="Late"
+                          checked={attendance[student.SNo] === "Late"}
+                          onChange={() => handleAttendanceChange(student.SNo, "Late")}
+                          className="peer sr-only"
+                        />
+                        <div className="w-11 h-6 bg-gray-700 rounded-full 
+                          peer-checked:bg-orange-500/30 transition-all duration-300">
+                          <div className="w-5 h-5 bg-gray-400 rounded-full shadow-md transform 
+                            translate-x-0.5 translate-y-0.5 transition-transform duration-300 ease-in-out
+                            peer-checked:translate-x-5 peer-checked:bg-orange-400
+                            group-hover:shadow-[0_0_8px_rgba(249,115,22,0.4)]">
+                          </div>
+                        </div>
+                      </label>
                     </td>
                   </tr>
                 ))}
