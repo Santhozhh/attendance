@@ -71,10 +71,13 @@ ${getList("Absent")}
 Have a Good Day
   `;
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(attendanceSummary);
-    alert("Attendance summary copied to clipboard!");
-  };
+  const [copied, setCopied] = useState(false);
+
+const copyToClipboard = () => {
+  navigator.clipboard.writeText(attendanceSummary);
+  setCopied(true);
+  setTimeout(() => setCopied(false), 2000); // Hide after 2 seconds
+};
 
   const shareOnWhatsApp = () => {
     const whatsappMessage = encodeURIComponent(attendanceSummary);
@@ -266,12 +269,19 @@ Have a Good Day
             className="flex gap-4 mt-6"
           >
             <button 
-              onClick={copyToClipboard} 
-              className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2.5 rounded-lg 
-                shadow-lg hover:shadow-pink-500/50 transition-all duration-200 flex items-center gap-2"
-            >
-              <span>Copy Summary</span>
-            </button>
+  onClick={copyToClipboard} 
+  className="relative bg-pink-500 hover:bg-pink-600 text-white px-6 py-2.5 rounded-lg 
+    shadow-lg hover:shadow-pink-500/50 transition-all duration-200 flex items-center gap-2"
+>
+  <span>Copy Summary</span>
+    {copied && (
+    <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white 
+      text-sm px-3 py-1 rounded-md shadow-lg">
+      Copied!
+    </div>
+  )}
+</button>
+
             <button 
               onClick={shareOnWhatsApp} 
               className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2.5 rounded-lg 
