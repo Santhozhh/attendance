@@ -213,7 +213,7 @@ ${getList("Absent")}
                             ? 'bg-purple-500 text-white' 
                             : 'bg-gray-700 text-gray-400'}`}
                       >
-                        On Duty (INTERNAL)
+                        On Duty (Internal)
                       </button>
                     
                     </td>
@@ -225,7 +225,7 @@ ${getList("Absent")}
                             ? 'bg-purple-900 text-white' 
                             : 'bg-gray-700 text-gray-400'}`}
                       >
-                        On Duty(EXTERNAL)
+                        On Duty(External)
                       </button>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
