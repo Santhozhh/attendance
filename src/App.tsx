@@ -277,7 +277,9 @@ ${getList("Absent")}
             >
               <span>Share on WhatsApp</span>
             </button>
+            
           </motion.div>
+          <h1 className="origin-bottom-right font-bold text-2xl">Developed By santhosh</h1>
         </motion.div>
       </motion.div>
     </div>
