@@ -222,7 +222,7 @@ ${getList("Absent")}
                         onClick={() => handleAttendanceChange(student.SNo, "On Duty(EXTERNAL)")}
                         className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
                           ${attendance[student.SNo] === "On Duty(EXTERNAL)" 
-                            ? 'bg-purple-500 text-white' 
+                            ? 'bg-purple-900 text-white' 
                             : 'bg-gray-700 text-gray-400'}`}
                       >
                         On Duty(EXTERNAL)
