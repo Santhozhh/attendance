@@ -281,7 +281,7 @@ Have a Good Day
             </button>
             
           </motion.div>
-          <h1 className="origin-bottom-right font-bold text-2xl">Developed By santhosh</h1>
+          <h1 className="origin-bottom-right font-bold text-2xl">Developed By Santhosh</h1>
         </motion.div>
       </motion.div>
     </div>
