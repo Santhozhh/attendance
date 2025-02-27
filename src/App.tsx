@@ -67,6 +67,8 @@ ${getList("Late")}
 
 ABSENT
 ${getList("Absent")}
+
+Have a Good Day
   `;
 
   const copyToClipboard = () => {
