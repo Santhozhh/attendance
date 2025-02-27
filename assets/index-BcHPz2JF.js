@@ -71,6 +71,8 @@ ${z("Late")}
 
 ABSENT
 ${z("Absent")}
+
+Have a Good Day
   `,w=()=>{navigator.clipboard.writeText(U),alert("Attendance summary copied to clipboard!")},j=()=>{const B=`https://wa.me/?text=${encodeURIComponent(U)}`;window.open(B,"_blank")},Y={hidden:{opacity:0},visible:{opacity:1,transition:{staggerChildren:.3}}},G={hidden:{opacity:0,x:-100},visible:{opacity:1,x:0,transition:{type:"spring",stiffness:100,damping:12}}};return F.jsx("div",{className:"min-h-screen w-full p-6 bg-[#0a0a0a]",children:F.jsxs(ol.div,{initial:"hidden",animate:"visible",variants:Y,children:[F.jsxs(ol.div,{variants:G,className:"text-center mb-8",children:[F.jsx("h1",{className:`text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent \r
             drop-shadow-[0_0_10px_rgba(236,72,153,0.3)] mb-2`,children:"Attendance Management III-C"}),F.jsx("p",{className:"text-gray-400 text-lg",children:"Your gateway to student attendance tracking"})]}),F.jsx(ol.div,{variants:G,className:`h-[28rem] overflow-hidden rounded-xl shadow-2xl bg-gray-800 \r
             border border-pink-500/20 shadow-pink-500/10`,children:F.jsx("div",{className:"overflow-y-auto h-full",children:F.jsxs("table",{className:"min-w-full h-full table-auto animate-slideInFromRight",children:[F.jsx("thead",{className:"sticky top-0 bg-gradient-to-r from-pink-900 via-purple-900 to-pink-900 z-10",children:F.jsxs("tr",{className:"border-b border-pink-500/30",children:[F.jsx("th",{className:"px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider",children:"S No"}),F.jsx("th",{className:`px-4 py-4 text-pink-200 font-bold tracking-wider whitespace-nowrap sticky left-0 \r
