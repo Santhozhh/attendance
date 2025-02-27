@@ -58,8 +58,10 @@ ${getList("Leave")}
 
 ON DUTY(INTERNAL)
 ${getList("On Duty(INTERNAL)")}
+
 ON DUTY(EXTERNAL)
 ${getList("On Duty(EXTERNAL)")}
+
 LATE
 ${getList("Late")}
 
