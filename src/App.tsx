@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./app.css";
@@ -28,10 +29,11 @@ const App = () => {
 
   const totalStudents = students.length;
   const presentCount = Object.values(attendance).filter(
-    (a) => a === "Present" || a === "On Duty" || a === "Late"
+    (a) => a === "Present" || a === "On Duty(INTERNAL)" || a === "Late" || a === "On Duty(EXTERNAL)"
   ).length;
   const leaveCount = Object.values(attendance).filter((a) => a === "Leave").length;
-  const odCount = Object.values(attendance).filter((a) => a === "On Duty").length;
+  const odCountINTERNAL = Object.values(attendance).filter((a) => a === "On Duty(INTERNAL)").length;
+  const odCountEXTERNAL = Object.values(attendance).filter((a) => a === "On Duty(EXTERNAL)").length;
   const lateCount = Object.values(attendance).filter((a) => a === "Late").length;
   const absentCount = Object.values(attendance).filter((a) => a === "Absent").length;
 
@@ -45,16 +47,18 @@ const App = () => {
 DATE : ${date}
 PRESENT: ${presentCount}/${totalStudents}
 LEAVE: ${leaveCount}
-ON DUTY: ${odCount}
+ON DUTY (INTERNAL): ${odCountINTERNAL}
+ON DUTY (EXTERNAL) : ${odCountEXTERNAL}
 LATE: ${lateCount}
 ABSENT: ${absentCount}
 
 LEAVE
 ${getList("Leave")}
 
-ON DUTY
-${getList("On Duty")}
-
+ON DUTY(INTERNAL)
+${getList("On Duty(INTERNAL)")}
+ON DUTY(EXTERNAL)
+${getList("On Duty(EXTERNAL)")}
 LATE
 ${getList("Late")}
 
@@ -149,7 +153,9 @@ ${getList("Absent")}
                     Leave
                   </th>
                   <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
-                    On Duty
+                    On Duty(INTERNAL)
+                  </th><th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                    On Duty(EXTERNAL)
                   </th>
                   <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
                     Late
@@ -201,13 +207,25 @@ ${getList("Absent")}
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
                       <button
-                        onClick={() => handleAttendanceChange(student.SNo, "On Duty")}
+                        onClick={() => handleAttendanceChange(student.SNo, "On Duty(INTERNAL)")}
                         className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
-                          ${attendance[student.SNo] === "On Duty" 
+                          ${attendance[student.SNo] === "On Duty(INTERNAL)" 
                             ? 'bg-purple-500 text-white' 
                             : 'bg-gray-700 text-gray-400'}`}
                       >
-                        On Duty
+                        On Duty (INTERNAL)
+                      </button>
+                    
+                    </td>
+                    <td className="border-b border-pink-500/20 p-2">
+                    <button
+                        onClick={() => handleAttendanceChange(student.SNo, "On Duty(EXTERNAL)")}
+                        className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
+                          ${attendance[student.SNo] === "On Duty(EXTERNAL)" 
+                            ? 'bg-purple-500 text-white' 
+                            : 'bg-gray-700 text-gray-400'}`}
+                      >
+                        On Duty(EXTERNAL)
                       </button>
                     </td>
                     <td className="border-b border-pink-500/20 p-2">
