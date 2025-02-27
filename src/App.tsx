@@ -49,6 +49,7 @@ PRESENT: ${presentCount}/${totalStudents}
 LEAVE: ${leaveCount}
 ON DUTY (INTERNAL): ${odCountINTERNAL}
 ON DUTY (EXTERNAL) : ${odCountEXTERNAL}
+TOTAL ON DUTY : ${odCountEXTERNAL+odCountINTERNAL}
 LATE: ${lateCount}
 ABSENT: ${absentCount}
 
@@ -154,7 +155,7 @@ ${getList("Absent")}
                   </th>
                   <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
                     On Duty(INTERNAL)
-                  </th><th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                  </th><th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r npmfrom-pink-400 to-pink-200 font-bold tracking-wider">
                     On Duty(EXTERNAL)
                   </th>
                   <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
