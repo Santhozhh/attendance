@@ -62,8 +62,10 @@ ${z("Leave")}
 
 ON DUTY(INTERNAL)
 ${z("On Duty(INTERNAL)")}
+
 ON DUTY(EXTERNAL)
 ${z("On Duty(EXTERNAL)")}
+
 LATE
 ${z("Late")}
 
