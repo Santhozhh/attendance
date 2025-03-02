@@ -147,9 +147,15 @@ const Attendance = () => {
       
       const url = date 
         ? `/api/${date}`
-        : '/api/';
+        : '/api';
         
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      
       if (!response.ok) {
         throw new Error(response.status === 404 
           ? 'No attendance records found for the selected date' 

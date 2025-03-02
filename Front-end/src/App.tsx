@@ -105,9 +105,10 @@ const copyToClipboard = () => {
       };
 
       // Save to database
-      const response = await fetch('http://localhost:5000/api/', {
+      const response = await fetch('/api', {
         method: 'POST',
         headers: {
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(attendanceData)

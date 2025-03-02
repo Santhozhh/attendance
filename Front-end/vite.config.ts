@@ -7,7 +7,10 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: "https://attendance-v875.onrender.com"
+        target: 'https://attendance-v875.onrender.com',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
       }
     }
   }
