@@ -181,7 +181,7 @@ app.get('/api/attendance/:date', async (req, res) => {
 });
 
 // Get attendance statistics
-app.get('/api/attendance/stats/summary', async (req, res) => {
+app.get('/api/stats/summary', async (req, res) => {
   try {
     const stats = await AttendanceCount.aggregate([
       {
