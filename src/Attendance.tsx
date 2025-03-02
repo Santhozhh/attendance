@@ -5,13 +5,7 @@ import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// Types
-interface Student {
-  SNo: string;
-  Name: string;
-  RollNo: string;
-  RegNo: string;
-}
+
 
 interface AttendanceRecord {
   _id: string;
@@ -32,26 +26,6 @@ interface AttendanceRecord {
   }[];
 }
 
-interface StudentAttendance {
-  studentId: string;
-  name: string;
-  rollNo: string;
-  totalDays: number;
-  presentDays: number;
-  absentDays: number;
-  leaveDays: number;
-  odInternalDays: number;
-  odExternalDays: number;
-  lateDays: number;
-  dates: {
-    present: string[];
-    absent: string[];
-    leave: string[];
-    odInternal: string[];
-    odExternal: string[];
-    late: string[];
-  };
-}
 
 interface StudentSummary {
   name: string;
@@ -512,7 +486,7 @@ const Attendance = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {record.studentRecords.map((student, index) => (
+                                {record.studentRecords.map((student) => (
                                   <tr key={student.studentId} className="border-b border-gray-800">
                                     <td className="py-2 px-4 text-gray-300">{student.rollNo}</td>
                                     <td className="py-2 px-4 text-gray-300">{student.name}</td>
