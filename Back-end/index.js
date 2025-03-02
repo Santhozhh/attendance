@@ -15,7 +15,7 @@ connectDB();
 // Routes
 
 // Save daily attendance count
-app.post('/api/attendance', async (req, res) => {
+app.post('/api/', async (req, res) => {
   try {
     const {
       presentCount,
@@ -48,7 +48,7 @@ app.post('/api/attendance', async (req, res) => {
 });
 
 // Get attendance history with optional date range
-app.get('/api/attendance', async (req, res) => {
+app.get('/api/', async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
     let query = {};
@@ -70,7 +70,7 @@ app.get('/api/attendance', async (req, res) => {
 });
 
 // Get student attendance history
-app.get('/api/attendance/student', async (req, res) => {
+app.get('/api//student', async (req, res) => {
   try {
     const { name, rollNo } = req.query;
     let query = {};
@@ -157,7 +157,7 @@ app.get('/api/attendance/student', async (req, res) => {
 });
 
 // Get attendance for a specific date
-app.get('/api/attendance/:date', async (req, res) => {
+app.get('/api/:date', async (req, res) => {
   try {
     const date = new Date(req.params.date);
     const startOfDay = new Date(date.setHours(0, 0, 0, 0));

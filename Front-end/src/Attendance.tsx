@@ -146,8 +146,8 @@ const Attendance = () => {
       setError(null);
       
       const url = date 
-        ? `/api/attendance/${date}`
-        : '/api/attendance';
+        ? `/api/${date}`
+        : '/api/';
         
       const response = await fetch(url);
       if (!response.ok) {
