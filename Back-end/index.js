@@ -6,7 +6,16 @@ const AttendanceCount = require('./schema');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://attendance-1-xcfw.onrender.com',
+    'http://localhost:5173',
+    // Add any other frontend URLs that need access
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Connect to MongoDB
