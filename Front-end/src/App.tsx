@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import "./app.css";
+import "./App.css";
 import Attendance from "./Attendance";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
