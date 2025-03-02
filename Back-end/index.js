@@ -79,7 +79,7 @@ app.get('/api/', async (req, res) => {
 });
 
 // Get student attendance history
-app.get('/api//student', async (req, res) => {
+app.get('/api/student', async (req, res) => {
   try {
     const { name, rollNo } = req.query;
     let query = {};
