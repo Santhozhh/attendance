@@ -10,7 +10,7 @@ app.use(cors({
   origin: [
     'https://attendance-1-xcfw.onrender.com',
     'http://localhost:5173',
-    // Add any other frontend URLs that need access
+    'https://attendance-v875.onrender.com'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
