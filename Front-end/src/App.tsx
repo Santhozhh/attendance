@@ -304,22 +304,22 @@ const copyToClipboard = () => {
 
             <motion.div 
               variants={itemVariants}
-              className="mt-6 p-6 bg-black/40 rounded-xl shadow-2xl border border-pink-500/20 text-gray-300
+              className="mt-6 p-4 sm:p-6 bg-black/40 rounded-xl shadow-2xl border border-pink-500/20 text-gray-300
                 shadow-pink-500/10"
             >
-              <h2 className="text-2xl font-bold mb-4 text-pink-500">Attendance Summary</h2>
-              <pre className="bg-black/60 p-4 rounded-lg font-mono text-sm border border-pink-500/20">
+              <h2 className="text-xl sm:text-2xl font-bold mb-4 text-pink-500">Attendance Summary</h2>
+              <pre className="bg-black/60 p-2 sm:p-4 rounded-lg font-mono text-xs sm:text-sm overflow-x-auto border border-pink-500/20">
                 {attendanceSummary}
               </pre>
 
               <motion.div 
                 variants={itemVariants}
-                className="flex gap-4 mt-6"
+                className="flex flex-col sm:flex-row gap-4 mt-6"
               >
                 <button 
                   onClick={copyToClipboard} 
-                  className="relative bg-pink-500 hover:bg-pink-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-pink-500/50 transition-all duration-200 flex items-center gap-2"
+                  className="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white px-6 py-2.5 rounded-lg 
+                    shadow-lg hover:shadow-pink-500/50 transition-all duration-200 flex items-center justify-center gap-2"
                 >
                   <span>Copy Summary</span>
                   {copied && (
@@ -332,29 +332,29 @@ const copyToClipboard = () => {
 
                 <button 
                   onClick={saveToDatabase} 
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-blue-500/50 transition-all duration-200 flex items-center gap-2"
+                  className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-lg 
+                    shadow-lg hover:shadow-blue-500/50 transition-all duration-200 flex items-center justify-center gap-2"
                 >
                   <span>Save to Database</span>
                 </button>
 
                 <button 
                   onClick={shareOnWhatsApp} 
-                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-green-500/50 transition-all duration-200 flex items-center gap-2"
+                  className="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white px-6 py-2.5 rounded-lg 
+                    shadow-lg hover:shadow-green-500/50 transition-all duration-200 flex items-center justify-center gap-2"
                 >
                   <span>Share on WhatsApp</span>
                 </button>
 
                 <button 
                   onClick={() => navigate('/login')} 
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-purple-500/50 transition-all duration-200 flex items-center gap-2"
+                  className="w-full sm:w-auto bg-purple-500 hover:bg-purple-600 text-white px-6 py-2.5 rounded-lg 
+                    shadow-lg hover:shadow-purple-500/50 transition-all duration-200 flex items-center justify-center gap-2"
                 >
                   <span>View History</span>
                 </button>
               </motion.div>
-              <h1 className="origin-bottom-right font-bold text-2xl">Developed By Santhosh</h1>
+              <h1 className="mt-6 origin-bottom-right font-bold text-2xl">Developed By Santhosh</h1>
             </motion.div>
           </motion.div>
         </div>

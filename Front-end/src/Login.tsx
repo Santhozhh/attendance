@@ -32,14 +32,14 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full p-6 bg-[#0a0a0a] flex items-center justify-center">
+    <div className="min-h-screen w-full p-4 sm:p-6 bg-[#0a0a0a] flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md mx-4 sm:mx-auto"
       >
-        <div className="bg-gray-800 rounded-xl p-8 shadow-2xl border border-pink-500/20">
-          <h2 className="text-2xl font-bold text-center bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent mb-6">
+        <div className="bg-gray-800 rounded-xl p-6 sm:p-8 shadow-2xl border border-pink-500/20">
+          <h2 className="text-xl sm:text-2xl font-bold text-center bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent mb-6">
             Login Required
           </h2>
           
@@ -84,22 +84,24 @@ const Login = () => {
               </motion.div>
             )}
 
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2 rounded-lg
-                shadow-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-200"
-            >
-              Login
-            </button>
+            <div className="space-y-4">
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2.5 rounded-lg
+                  shadow-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-200"
+              >
+                Login
+              </button>
 
-            <button
-              type="button"
-              onClick={() => navigate('/')}
-              className="w-full bg-gray-700 text-white py-2 rounded-lg shadow-lg hover:bg-gray-600
-                transition-all duration-200 mt-4"
-            >
-              Back to Dashboard
-            </button>
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                className="w-full bg-gray-700 text-white py-2.5 rounded-lg shadow-lg hover:bg-gray-600
+                  transition-all duration-200"
+              >
+                Back to Dashboard
+              </button>
+            </div>
           </form>
         </div>
       </motion.div>
