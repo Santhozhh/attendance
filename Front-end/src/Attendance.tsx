@@ -162,26 +162,24 @@ const Attendance = () => {
           }
         });
 
-        // Calculate total days excluding Internal OD
-        const totalDaysExcludingInternalOD = summary.totalDays;
+        // Calculate total days excluding both Internal and External OD
+        const totalDaysExcludingOD = summary.totalDays;
 
         // Update the summary with calculated percentages
         setStudentSummary({
           ...summary,
-          presentPercentage: totalDaysExcludingInternalOD > 0 
-            ? ((summary.presentCount / totalDaysExcludingInternalOD) * 100).toFixed(1) 
+          presentPercentage: totalDaysExcludingOD > 0 
+            ? ((summary.presentCount / totalDaysExcludingOD) * 100).toFixed(1) 
             : '0.0',
-          absentPercentage: totalDaysExcludingInternalOD > 0 
-            ? ((summary.absentCount / totalDaysExcludingInternalOD) * 100).toFixed(1) 
+          absentPercentage: totalDaysExcludingOD > 0 
+            ? ((summary.absentCount / totalDaysExcludingOD) * 100).toFixed(1) 
             : '0.0',
-          leavePercentage: totalDaysExcludingInternalOD > 0 
-            ? ((summary.leaveCount / totalDaysExcludingInternalOD) * 100).toFixed(1) 
+          leavePercentage: totalDaysExcludingOD > 0 
+            ? ((summary.leaveCount / totalDaysExcludingOD) * 100).toFixed(1) 
             : '0.0',
-          odExternalPercentage: totalDaysExcludingInternalOD > 0 
-            ? ((summary.odExternalCount / totalDaysExcludingInternalOD) * 100).toFixed(1) 
-            : '0.0',
-          latePercentage: totalDaysExcludingInternalOD > 0 
-            ? ((summary.lateCount / totalDaysExcludingInternalOD) * 100).toFixed(1) 
+          odExternalPercentage: '0.0', // Set to 0 since it's not counted
+          latePercentage: totalDaysExcludingOD > 0 
+            ? ((summary.lateCount / totalDaysExcludingOD) * 100).toFixed(1) 
             : '0.0'
         });
       }
@@ -373,40 +371,26 @@ const Attendance = () => {
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">Present</p>
             <p className="text-xl text-green-500">{summary.presentCount}</p>
-            <p className="text-sm text-gray-400 mt-1">
-              {summary.presentPercentage}%
-            </p>
           </div>
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">Absent</p>
             <p className="text-xl text-red-500">{summary.absentCount}</p>
-            <p className="text-sm text-gray-400 mt-1">
-              {summary.absentPercentage}%
-            </p>
           </div>
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">Leave</p>
             <p className="text-xl text-yellow-500">{summary.leaveCount}</p>
-            <p className="text-sm text-gray-400 mt-1">
-              {summary.leavePercentage}%
-            </p>
           </div>
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">OD (Internal)</p>
             <p className="text-xl text-purple-500">{summary.odInternalCount}</p>
-            <p className="text-sm text-gray-400 mt-1">Not counted</p>
           </div>
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">OD (External)</p>
             <p className="text-xl text-purple-500">{summary.odExternalCount}</p>
-            <p className="text-sm text-gray-400 mt-1">Not counted</p>
           </div>
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">Late</p>
             <p className="text-xl text-orange-500">{summary.lateCount}</p>
-            <p className="text-sm text-gray-400 mt-1">
-              {summary.latePercentage}%
-            </p>
           </div>
         </div>
       </div>
@@ -635,48 +619,26 @@ const Attendance = () => {
                         <div className="bg-gray-900 p-4 rounded-lg">
                           <p className="text-sm text-gray-400">Present</p>
                           <p className="text-xl text-green-500">{record.presentCount}</p>
-                          <p className="text-sm text-gray-400 mt-1">
-                            {record.totalStudents - record.odInternalCount > 0 
-                              ? ((record.presentCount / (record.totalStudents - record.odInternalCount)) * 100).toFixed(1) 
-                              : '0.0'}%
-                          </p>
                         </div>
                         <div className="bg-gray-900 p-4 rounded-lg">
                           <p className="text-sm text-gray-400">Absent</p>
                           <p className="text-xl text-red-500">{record.absentCount}</p>
-                          <p className="text-sm text-gray-400 mt-1">
-                            {record.totalStudents - record.odInternalCount > 0 
-                              ? ((record.absentCount / (record.totalStudents - record.odInternalCount)) * 100).toFixed(1) 
-                              : '0.0'}%
-                          </p>
                         </div>
                         <div className="bg-gray-900 p-4 rounded-lg">
                           <p className="text-sm text-gray-400">Leave</p>
                           <p className="text-xl text-yellow-500">{record.leaveCount}</p>
-                          <p className="text-sm text-gray-400 mt-1">
-                            {record.totalStudents - record.odInternalCount > 0 
-                              ? ((record.leaveCount / (record.totalStudents - record.odInternalCount)) * 100).toFixed(1) 
-                              : '0.0'}%
-                          </p>
                         </div>
                         <div className="bg-gray-900 p-4 rounded-lg">
                           <p className="text-sm text-gray-400">OD (Internal)</p>
                           <p className="text-xl text-purple-500">{record.odInternalCount}</p>
-                          <p className="text-sm text-gray-400 mt-1">Not counted</p>
                         </div>
                         <div className="bg-gray-900 p-4 rounded-lg">
                           <p className="text-sm text-gray-400">OD (External)</p>
                           <p className="text-xl text-purple-500">{record.odExternalCount}</p>
-                          <p className="text-sm text-gray-400 mt-1">Not counted</p>
                         </div>
                         <div className="bg-gray-900 p-4 rounded-lg">
                           <p className="text-sm text-gray-400">Late</p>
                           <p className="text-xl text-orange-500">{record.lateCount}</p>
-                          <p className="text-sm text-gray-400 mt-1">
-                            {record.totalStudents - record.odInternalCount > 0 
-                              ? ((record.lateCount / (record.totalStudents - record.odInternalCount)) * 100).toFixed(1) 
-                              : '0.0'}%
-                          </p>
                         </div>
                       </div>
                     </div>
