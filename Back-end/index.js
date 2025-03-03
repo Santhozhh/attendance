@@ -212,6 +212,22 @@ app.get('/api/stats/summary', async (req, res) => {
   }
 });
 
+// Delete attendance record
+app.delete('/api/:id', async (req, res) => {
+  try {
+    const record = await AttendanceCount.findByIdAndDelete(req.params.id);
+    
+    if (!record) {
+      return res.status(404).json({ message: 'Record not found' });
+    }
+    
+    res.json({ message: 'Record deleted successfully' });
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

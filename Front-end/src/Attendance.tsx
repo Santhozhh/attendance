@@ -197,6 +197,33 @@ const Attendance = () => {
     navigate('/login');
   };
 
+  const handleDelete = async (recordId: string) => {
+    if (window.confirm('Are you sure you want to delete this attendance record?')) {
+      try {
+        const response = await fetch(`${API_URL}/api/${recordId}`, {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete attendance record');
+        }
+
+        // Remove the deleted record from state
+        setRecords(prevRecords => prevRecords.filter(record => record._id !== recordId));
+        setFilteredRecords(prevRecords => prevRecords.filter(record => record._id !== recordId));
+        setSelectedRecord(null);
+        alert('Record deleted successfully!');
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('Failed to delete record. Please try again.');
+      }
+    }
+  };
+
   // Render pie chart
   const renderPieChart = (data: number[], labels: string[], colors: string[]) => {
     const chartData = {
@@ -223,8 +250,8 @@ const Attendance = () => {
             label: (context: any) => {
               const label = context.label || '';
               const value = context.raw || 0;
-              const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
-              const percentage = ((value / total) * 100).toFixed(1);
+              const total = context.dataset.data.reduce((a: number, b: number) => Number(a) + Number(b), 0);
+              const percentage = total > 0 ? ((Number(value) / total) * 100).toFixed(1) : '0.0';
               return `${label}: ${value} (${percentage}%)`;
             }
           }
@@ -413,17 +440,25 @@ const Attendance = () => {
             {filteredRecords.length > 0 ? (
               <div className="space-y-6">
                 {filteredRecords.map((record) => (
-                  <div key={record._id} className="bg-gray-800 rounded-xl p-6 shadow-lg border border-pink-500/20">
-                    <div className="flex justify-between items-center mb-6">
+                  <div key={record._id} className="bg-gray-800 rounded-xl p-4 sm:p-6 shadow-lg border border-pink-500/20">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                       <h3 className="text-lg font-medium text-gray-200">
                         {new Date(record.date).toLocaleDateString('en-GB')}
                       </h3>
-                      <button
-                        onClick={() => setSelectedRecord(record)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
-                      >
-                        View Details
-                      </button>
+                      <div className="flex gap-2 w-full sm:w-auto">
+                        <button
+                          onClick={() => setSelectedRecord(record)}
+                          className="flex-1 sm:flex-none bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                        >
+                          View Details
+                        </button>
+                        <button
+                          onClick={() => handleDelete(record._id)}
+                          className="flex-1 sm:flex-none bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
