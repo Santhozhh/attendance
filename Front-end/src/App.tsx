@@ -84,9 +84,8 @@ const copyToClipboard = () => {
   setTimeout(() => setCopied(false), 6000); 
 };
 
-  const shareOnWhatsApp = async () => {
+  const saveToDatabase = async () => {
     try {
-      // First save the data to database
       const studentRecords = students.map((student: any) => ({
         studentId: student.SNo,
         rollNo: student.RollNo,
@@ -105,7 +104,7 @@ const copyToClipboard = () => {
         studentRecords
       };
 
-      // Save to database]
+      // Save to database
       const response = await fetch(`${API_URL}/api`, {
         method: 'POST',
         headers: {
@@ -118,18 +117,18 @@ const copyToClipboard = () => {
       if (!response.ok) {
         throw new Error('Failed to save attendance data');
       }
-
-      // Then share on WhatsApp
-      const whatsappMessage = encodeURIComponent(attendanceSummary);
-      const whatsappURL = `https://wa.me/?text=${whatsappMessage}`;
-      window.open(whatsappURL, "_blank");
+      
+      alert('Data saved successfully!');
     } catch (error) {
       console.error('Error saving attendance:', error);
-      // Still share on WhatsApp even if saving fails
-      const whatsappMessage = encodeURIComponent(attendanceSummary);
-      const whatsappURL = `https://wa.me/?text=${whatsappMessage}`;
-      window.open(whatsappURL, "_blank");
+      alert('Failed to save data. Please try again.');
     }
+  };
+
+  const shareOnWhatsApp = () => {
+    const whatsappMessage = encodeURIComponent(attendanceSummary);
+    const whatsappURL = `https://wa.me/?text=${whatsappMessage}`;
+    window.open(whatsappURL, "_blank");
   };
 
   const containerVariants = {
@@ -332,17 +331,25 @@ const copyToClipboard = () => {
                 </button>
 
                 <button 
-                  onClick={shareOnWhatsApp} 
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-purple-500/50 transition-all duration-200 flex items-center gap-2"
+                  onClick={saveToDatabase} 
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-lg 
+                    shadow-lg hover:shadow-blue-500/50 transition-all duration-200 flex items-center gap-2"
                 >
-                  <span> Save Data & Share on WhatsApp</span>
+                  <span>Save to Database</span>
+                </button>
+
+                <button 
+                  onClick={shareOnWhatsApp} 
+                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2.5 rounded-lg 
+                    shadow-lg hover:shadow-green-500/50 transition-all duration-200 flex items-center gap-2"
+                >
+                  <span>Share on WhatsApp</span>
                 </button>
 
                 <button 
                   onClick={() => navigate('/login')} 
-                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-green-500/50 transition-all duration-200 flex items-center gap-2"
+                  className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2.5 rounded-lg 
+                    shadow-lg hover:shadow-purple-500/50 transition-all duration-200 flex items-center gap-2"
                 >
                   <span>View History</span>
                 </button>
