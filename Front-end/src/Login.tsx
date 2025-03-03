@@ -18,7 +18,7 @@ const Login = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === 'natpu' && password === 'natpu@123') {
+    if (username === 'server' && password === 'server@123') {
       // Set authentication state
       localStorage.setItem('isAuthenticated', 'true');
       
