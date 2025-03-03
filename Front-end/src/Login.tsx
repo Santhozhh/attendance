@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,74 +37,83 @@ const Login = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md mx-4 sm:mx-auto"
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md p-6 sm:p-8 bg-gray-800 rounded-xl shadow-2xl border border-pink-500/20"
       >
-        <div className="bg-gray-800 rounded-xl p-6 sm:p-8 shadow-2xl border border-pink-500/20">
-          <h2 className="text-xl sm:text-2xl font-bold text-center bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">
+          <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
+            bg-clip-text text-transparent inline-block">
             Login Required
-          </h2>
+          </span>
+        </h1>
+        <p className="text-center mb-8 animate-gradient bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-[length:200%_auto] 
+          bg-clip-text text-transparent inline-block">
+          Please enter your password to view attendance history
+        </p>
+
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div>
+            <label className="block text-gray-400 text-sm font-medium mb-2">
+              Username
+            </label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2
+                focus:outline-none focus:border-pink-500 transition-colors"
+              placeholder="Enter username"
+              required
+            />
+          </div>
           
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-gray-400 text-sm font-medium mb-2">
-                Username
-              </label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2
-                  focus:outline-none focus:border-pink-500 transition-colors"
-                placeholder="Enter username"
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-gray-400 text-sm font-medium mb-2">
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
+                bg-clip-text text-transparent">
                 Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2
-                  focus:outline-none focus:border-pink-500 transition-colors"
-                placeholder="Enter password"
-                required
-              />
-            </div>
+              </span>
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2.5
+                focus:outline-none focus:border-pink-500 transition-colors"
+              placeholder="Enter password"
+              required
+            />
+          </div>
 
-            {error && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-red-500 text-center text-sm bg-red-500/10 border border-red-500/20 rounded-lg p-2"
-              >
-                {error}
-              </motion.div>
-            )}
+          {error && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-red-500 text-sm text-center"
+            >
+              {error}
+            </motion.p>
+          )}
 
-            <div className="space-y-4">
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2.5 rounded-lg
-                  shadow-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-200"
-              >
-                Login
-              </button>
+          <div className="space-y-4">
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2.5 rounded-lg
+                shadow-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-200"
+            >
+              Login
+            </button>
 
-              <button
-                type="button"
-                onClick={() => navigate('/')}
-                className="w-full bg-gray-700 text-white py-2.5 rounded-lg shadow-lg hover:bg-gray-600
-                  transition-all duration-200"
-              >
-                Back to Dashboard
-              </button>
-            </div>
-          </form>
-        </div>
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="w-full bg-gray-700 text-white py-2.5 rounded-lg shadow-lg hover:bg-gray-600
+                transition-all duration-200"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+        </form>
       </motion.div>
     </div>
   );

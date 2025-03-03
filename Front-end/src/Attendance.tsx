@@ -436,8 +436,11 @@ const Attendance = () => {
 
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-            Attendance History
+          <h1 className="text-4xl font-bold">
+            <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
+              bg-clip-text text-transparent inline-block">
+              Attendance History
+            </span>
           </h1>
           <div className="flex gap-4">
             <button

@@ -204,11 +204,16 @@ const copyToClipboard = () => {
               variants={itemVariants}
               className="text-center mb-8"
             >
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent 
-                drop-shadow-[0_0_10px_rgba(236,72,153,0.3)] mb-2">
-                Attendance Management III-C
+              <h1 className="text-4xl font-bold mb-2">
+                <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
+                  bg-clip-text text-transparent inline-block relative drop-shadow-[0_0_10px_rgba(236,72,153,0.3)]">
+                  Attendance Management III-C
+                </span>
               </h1>
-              <p className="text-gray-400 text-lg">Your gateway to student attendance tracking</p>
+              <p className=" text-lg animate-gradient bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-[length:200%_auto] 
+                bg-clip-text text-transparent inline-block">
+                Your gateway to student attendance tracking
+              </p>
             </motion.div>
 
             <motion.div 
@@ -341,7 +346,12 @@ const copyToClipboard = () => {
               className="mt-6 p-4 sm:p-6 bg-black/40 rounded-xl shadow-2xl border border-pink-500/20 text-gray-300
                 shadow-pink-500/10"
             >
-              <h2 className="text-xl sm:text-2xl font-bold mb-4 text-pink-500">Attendance Summary</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">
+                <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
+                  bg-clip-text text-transparent inline-block">
+                  Attendance Summary
+                </span>
+              </h2>
               <pre className="bg-black/60 p-2 sm:p-4 rounded-lg font-mono text-xs sm:text-sm overflow-x-auto border border-pink-500/20">
                 {attendanceSummary}
               </pre>
@@ -388,7 +398,12 @@ const copyToClipboard = () => {
                   <span>View History</span>
                 </button>
               </motion.div>
-              <h1 className="mt-6 origin-bottom-right font-bold text-2xl">Developed By Santhosh</h1>
+              <h1 className="mt-6 origin-bottom-right font-bold text-2xl relative">
+                <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
+                  bg-clip-text text-transparent inline-block relative">
+                  Developed By Santhosh
+                </span>
+              </h1>
             </motion.div>
           </motion.div>
         </div>
@@ -402,5 +417,28 @@ const copyToClipboard = () => {
     </Routes>
   );
 };
+
+const styleSheet = document.styleSheets[0];
+styleSheet.insertRule(`
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+`, styleSheet.cssRules.length);
+
+styleSheet.insertRule(`
+  .animate-gradient {
+    animation: gradient 3s linear infinite;
+    background-size: 200% auto;
+  }
+`, styleSheet.cssRules.length);
+
+styleSheet.insertRule(`
+  .animate-gradient:hover {
+    animation: gradient 1.5s linear infinite;
+    background-size: 200% auto;
+  }
+`, styleSheet.cssRules.length);
 
 export default App;
