@@ -77,8 +77,7 @@ ${getList("Late")}
 ABSENT
 ${getList("Absent")}
 
-Have a Nice Day 😊.
-  `;
+Have a  Very Nice Day`;
 
   const [copied, setCopied] = useState(false);
 
