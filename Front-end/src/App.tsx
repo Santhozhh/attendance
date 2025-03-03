@@ -38,7 +38,7 @@ const App = () => {
 
   const totalStudents = students.length;
   const presentCount = Object.values(attendance).filter(
-    (a) => a === "Present" || a === "On Duty(EXTERNAL)" || a === "Late"
+    (a) => a === "Present" || a === "Late"
   ).length;
   const leaveCount = Object.values(attendance).filter((a) => a === "Leave").length;
   const odCountINTERNAL = Object.values(attendance).filter((a) => a === "On Duty(INTERNAL)").length;
