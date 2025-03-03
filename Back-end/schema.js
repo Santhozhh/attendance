@@ -32,6 +32,11 @@ const attendanceCountSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
+  lateCount: {
+    type: Number,
+    required: true,
+    default: 0
+  },
   totalStudents: {
     type: Number,
     required: true

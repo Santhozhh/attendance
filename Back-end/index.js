@@ -32,6 +32,7 @@ app.post('/api/', async (req, res) => {
       leaveCount,
       odInternalCount,
       odExternalCount,
+      lateCount,
       totalStudents,
       attendanceData,
       studentRecords
@@ -44,6 +45,7 @@ app.post('/api/', async (req, res) => {
       leaveCount,
       odInternalCount,
       odExternalCount,
+      lateCount,
       totalStudents,
       attendanceData,
       studentRecords
