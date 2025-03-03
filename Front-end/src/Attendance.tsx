@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import { motion } from 'framer-motion';
 const API_URL = import.meta.env.VITE_API_URL;
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -53,6 +54,23 @@ const Attendance = () => {
   const [searchName, setSearchName] = useState('');
   const [filteredRecords, setFilteredRecords] = useState<AttendanceRecord[]>([]);
   const [studentSummary, setStudentSummary] = useState<StudentSummary | null>(null);
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{
+    isOpen: boolean;
+    recordId: string | null;
+  }>({
+    isOpen: false,
+    recordId: null
+  });
+
+  // Show notification function
+  const showNotification = (message: string, type: 'success' | 'error') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000); // Hide after 3 seconds
+  };
 
   // Authentication check
   useEffect(() => {
@@ -198,29 +216,34 @@ const Attendance = () => {
   };
 
   const handleDelete = async (recordId: string) => {
-    if (window.confirm('Are you sure you want to delete this attendance record?')) {
-      try {
-        const response = await fetch(`${API_URL}/api/${recordId}`, {
-          method: 'DELETE',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-        });
+    setDeleteConfirmation({ isOpen: true, recordId });
+  };
 
-        if (!response.ok) {
-          throw new Error('Failed to delete attendance record');
-        }
+  const confirmDelete = async () => {
+    if (!deleteConfirmation.recordId) return;
 
-        // Remove the deleted record from state
-        setRecords(prevRecords => prevRecords.filter(record => record._id !== recordId));
-        setFilteredRecords(prevRecords => prevRecords.filter(record => record._id !== recordId));
-        setSelectedRecord(null);
-        alert('Record deleted successfully!');
-      } catch (error) {
-        console.error('Delete error:', error);
-        alert('Failed to delete record. Please try again.');
+    try {
+      const response = await fetch(`${API_URL}/api/${deleteConfirmation.recordId}`, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete attendance record');
       }
+
+      setRecords(prevRecords => prevRecords.filter(record => record._id !== deleteConfirmation.recordId));
+      setFilteredRecords(prevRecords => prevRecords.filter(record => record._id !== deleteConfirmation.recordId));
+      setSelectedRecord(null);
+      showNotification('Record deleted successfully!', 'success');
+    } catch (error) {
+      console.error('Delete error:', error);
+      showNotification('Failed to delete record. Please try again.', 'error');
+    } finally {
+      setDeleteConfirmation({ isOpen: false, recordId: null });
     }
   };
 
@@ -354,7 +377,63 @@ const Attendance = () => {
   );
 
   return (
-    <div className="min-h-screen w-full p-6 bg-[#0a0a0a]">
+    <div className="min-h-screen w-full p-4 sm:p-6 bg-[#0a0a0a]">
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation.isOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 border border-pink-500/20"
+          >
+            <h3 className="text-xl font-medium text-gray-200 mb-4">Delete Attendance Record</h3>
+            <p className="text-gray-400 mb-6">Are you sure you want to delete this attendance record? This action cannot be undone.</p>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setDeleteConfirmation({ isOpen: false, recordId: null })}
+                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Notification Toast */}
+      {notification && (
+        <motion.div
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -100 }}
+          className={`fixed top-4 right-4 z-50 rounded-lg shadow-lg px-6 py-3 text-white ${
+            notification.type === 'success' 
+              ? 'bg-green-500/90 border border-green-600' 
+              : 'bg-red-500/90 border border-red-600'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {notification.type === 'success' ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            )}
+            <span>{notification.message}</span>
+          </div>
+        </motion.div>
+      )}
+
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">

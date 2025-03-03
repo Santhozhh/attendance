@@ -12,6 +12,10 @@ const App = () => {
   const [students, setStudents] = useState([]);
   const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
   const [date, setDate] = useState("");
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
 
   useEffect(() => {
     fetch("./III_CSE_C_NAME_LIST_FINAL.json")
@@ -84,6 +88,11 @@ const copyToClipboard = () => {
   setTimeout(() => setCopied(false), 6000); 
 };
 
+  const showNotification = (message: string, type: 'success' | 'error') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   const saveToDatabase = async () => {
     try {
       const studentRecords = students.map((student: any) => ({
@@ -104,7 +113,6 @@ const copyToClipboard = () => {
         studentRecords
       };
 
-      // Save to database
       const response = await fetch(`${API_URL}/api`, {
         method: 'POST',
         headers: {
@@ -118,10 +126,10 @@ const copyToClipboard = () => {
         throw new Error('Failed to save attendance data');
       }
       
-      alert('Data saved successfully!');
+      showNotification('Data saved successfully!', 'success');
     } catch (error) {
       console.error('Error saving attendance:', error);
-      alert('Failed to save data. Please try again.');
+      showNotification('Failed to save data. Please try again.', 'error');
     }
   };
 
@@ -161,6 +169,32 @@ const copyToClipboard = () => {
     <Routes>
       <Route path="/" element={
         <div className="min-h-screen w-full p-6 bg-[#0a0a0a]">
+          {notification && (
+            <motion.div
+              initial={{ opacity: 0, y: -100 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -100 }}
+              className={`fixed top-4 right-4 z-50 rounded-lg shadow-lg px-6 py-3 text-white ${
+                notification.type === 'success' 
+                  ? 'bg-green-500/90 border border-green-600' 
+                  : 'bg-red-500/90 border border-red-600'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                {notification.type === 'success' ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+                <span>{notification.message}</span>
+              </div>
+            </motion.div>
+          )}
+
           <motion.div
             initial="hidden"
             animate="visible"
