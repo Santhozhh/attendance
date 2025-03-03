@@ -5,6 +5,7 @@ import "./App.css";
 import Attendance from "./Attendance";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const App = () => {
   const navigate = useNavigate();
@@ -104,8 +105,8 @@ const copyToClipboard = () => {
         studentRecords
       };
 
-      // Save to database
-      const response = await fetch('/api', {
+      // Save to database]
+      const response = await fetch(`${API_URL}/api`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

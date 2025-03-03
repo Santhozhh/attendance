@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
-
+const API_URL = import.meta.env.VITE_API_URL;
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
@@ -146,8 +146,8 @@ const Attendance = () => {
       setError(null);
       
       const url = date 
-        ? `/api/${date}`
-        : '/api';
+        ? `${API_URL}/api/${date}`
+        : `${API_URL}/api`;
         
       const response = await fetch(url, {
         headers: {
