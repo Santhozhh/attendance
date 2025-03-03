@@ -149,6 +149,7 @@ const Attendance = () => {
                 break;
               case 'On Duty(EXTERNAL)':
                 summary.odExternalCount++;
+                summary.totalDays--; // Not counting this in total attendance
                 break;
               case 'Late':
                 summary.lateCount++;
@@ -307,23 +308,24 @@ const Attendance = () => {
               const value = context.raw || 0;
               const dataset = context.dataset.data;
               
-              // For Internal OD, show count without percentage
-              if (label === 'OD (Internal)') {
+              // For both Internal and External OD, show count without percentage
+              if (label === 'OD (Internal)' || label === 'OD (External)') {
                 return `${label}: ${value} (Not counted)`;
               }
               
-              // Calculate total excluding Internal OD
+              // Calculate total excluding both Internal and External OD
               const internalODIndex = labels.indexOf('OD (Internal)');
-              const totalExcludingInternalOD = dataset.reduce(
+              const externalODIndex = labels.indexOf('OD (External)');
+              const totalExcludingOD = dataset.reduce(
                 (sum: number, val: number, idx: number) => 
-                  idx !== internalODIndex ? sum + val : sum, 
+                  (idx !== internalODIndex && idx !== externalODIndex) ? sum + val : sum, 
                 0
               );
               
               // Calculate percentage
               let percentage = '0.0';
-              if (totalExcludingInternalOD > 0) {
-                percentage = ((value / totalExcludingInternalOD) * 100).toFixed(1);
+              if (totalExcludingOD > 0) {
+                percentage = ((value / totalExcludingOD) * 100).toFixed(1);
               }
               
               return `${label}: ${value} (${percentage}%)`;
@@ -397,9 +399,7 @@ const Attendance = () => {
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">OD (External)</p>
             <p className="text-xl text-purple-500">{summary.odExternalCount}</p>
-            <p className="text-sm text-gray-400 mt-1">
-              {summary.odExternalPercentage}%
-            </p>
+            <p className="text-sm text-gray-400 mt-1">Not counted</p>
           </div>
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">Late</p>
@@ -507,23 +507,23 @@ const Attendance = () => {
       )}
 
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold">
+        <div className="flex items-center justify-between mb-8 flex-col sm:flex-row gap-4">
+          <h1 className="text-3xl sm:text-4xl font-bold text-center sm:text-left">
             <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
               bg-clip-text text-transparent inline-block">
               Attendance History
             </span>
           </h1>
-          <div className="flex gap-4">
+          <div className="flex gap-2 w-full sm:w-auto">
             <button
               onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex-1 sm:flex-none bg-red-500 hover:bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base"
             >
               Logout
             </button>
             <button
               onClick={() => navigate('/')}
-              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex-1 sm:flex-none bg-gray-700 hover:bg-gray-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base"
             >
               Back to Dashboard
             </button>
@@ -667,11 +667,7 @@ const Attendance = () => {
                         <div className="bg-gray-900 p-4 rounded-lg">
                           <p className="text-sm text-gray-400">OD (External)</p>
                           <p className="text-xl text-purple-500">{record.odExternalCount}</p>
-                          <p className="text-sm text-gray-400 mt-1">
-                            {record.totalStudents - record.odInternalCount > 0 
-                              ? ((record.odExternalCount / (record.totalStudents - record.odInternalCount)) * 100).toFixed(1) 
-                              : '0.0'}%
-                          </p>
+                          <p className="text-sm text-gray-400 mt-1">Not counted</p>
                         </div>
                         <div className="bg-gray-900 p-4 rounded-lg">
                           <p className="text-sm text-gray-400">Late</p>
