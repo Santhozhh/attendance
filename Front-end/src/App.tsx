@@ -401,7 +401,7 @@ const copyToClipboard = () => {
               <h1 className="mt-6 origin-bottom-right font-bold text-2xl relative">
                 <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
                   bg-clip-text text-transparent inline-block relative">
-                  Developed By Santhosh
+                  Developed By VCET-III-C
                 </span>
               </h1>
             </motion.div>
