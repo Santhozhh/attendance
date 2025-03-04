@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import './styles.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -33,87 +34,107 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full p-4 sm:p-6 bg-[#0a0a0a] flex items-center justify-center">
+    <div className="min-h-screen w-full bg-[#0a0a0a] bg-mesh flex items-center justify-center p-4">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md p-6 sm:p-8 bg-gray-800 rounded-xl shadow-2xl border border-pink-500/20"
+        className="w-full max-w-md"
       >
-        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">
-          <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
-            bg-clip-text text-transparent inline-block">
-            Login Required
-          </span>
-        </h1>
-        <p className="text-center mb-8 animate-gradient bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-[length:200%_auto] 
-          bg-clip-text text-transparent inline-block">
-          Please enter your password to view attendance history
-        </p>
-
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label className="block text-gray-400 text-sm font-medium mb-2">
-              Username
-            </label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2
-                focus:outline-none focus:border-pink-500 transition-colors"
-              placeholder="Enter username"
-              required
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
-                bg-clip-text text-transparent">
-                Password
-              </span>
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2.5
-                focus:outline-none focus:border-pink-500 transition-colors"
-              placeholder="Enter password"
-              required
-            />
-          </div>
-
-          {error && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-red-500 text-sm text-center"
+        <div className="gradient-border">
+          <div className="glass-effect p-8 rounded-xl relative overflow-hidden">
+            <div className="spotlight"></div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-center mb-8"
             >
-              {error}
-            </motion.p>
-          )}
+              <h1 className="text-3xl font-bold mb-2 text-gradient">
+                Welcome Back
+              </h1>
+              <p className="text-gray-400">
+                Please sign in to continue
+              </p>
+            </motion.div>
 
-          <div className="space-y-4">
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2.5 rounded-lg
-                shadow-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-200"
-            >
-              Login
-            </button>
+            <form onSubmit={handleLogin} className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <label className="block text-gray-300 text-sm font-medium mb-2">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full bg-gray-900/50 text-white border border-gray-700 rounded-lg px-4 py-3
+                    focus:outline-none focus:border-[#45caff] focus:ring-1 focus:ring-[#45caff] transition-all
+                    placeholder-gray-500"
+                  placeholder="Enter your username"
+                  required
+                />
+              </motion.div>
 
-            <button
-              type="button"
-              onClick={() => navigate('/')}
-              className="w-full bg-gray-700 text-white py-2.5 rounded-lg shadow-lg hover:bg-gray-600
-                transition-all duration-200"
-            >
-              Back to Dashboard
-            </button>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <label className="block text-gray-300 text-sm font-medium mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-gray-900/50 text-white border border-gray-700 rounded-lg px-4 py-3
+                    focus:outline-none focus:border-[#45caff] focus:ring-1 focus:ring-[#45caff] transition-all
+                    placeholder-gray-500"
+                  placeholder="Enter your password"
+                  required
+                />
+              </motion.div>
+
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-500 text-sm text-center"
+                >
+                  {error}
+                </motion.div>
+              )}
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="space-y-4"
+              >
+                <button
+                  type="submit"
+                  className="w-full button-gradient text-white py-3 rounded-lg font-medium hover-glow"
+                >
+                  Sign in
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => navigate('/')}
+                  className="w-full bg-gray-800/50 text-gray-300 py-3 rounded-lg font-medium
+                    hover:bg-gray-700/50 transition-all duration-200"
+                >
+                  Back to Dashboard
+                </button>
+              </motion.div>
+            </form>
           </div>
-        </form>
+        </div>
       </motion.div>
     </div>
   );

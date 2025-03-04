@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
+import "./styles.css";
 import Attendance from "./Attendance";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
@@ -10,12 +11,29 @@ const API_URL = import.meta.env.VITE_API_URL;
 const App = () => {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
   const [date, setDate] = useState("");
   const [notification, setNotification] = useState<{
     message: string;
     type: 'success' | 'error';
   } | null>(null);
+
+  // Add mouse position state
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Add smooth spring animation
+  const springConfig = { damping: 30, stiffness: 200 };
+  const spotlightX = useSpring(mouseX, springConfig);
+  const spotlightY = useSpring(mouseY, springConfig);
+
+  // Handle mouse move for the entire page
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { clientX, clientY } = e;
+    mouseX.set(clientX);
+    mouseY.set(clientY);
+  };
 
   useEffect(() => {
     fetch("./III_CSE_C_NAME_LIST_FINAL.json")
@@ -165,245 +183,273 @@ const copyToClipboard = () => {
     }
   };
 
+  const tableRowVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0 },
+    transition: { type: "spring", stiffness: 100, damping: 12 }
+  };
+
+  const filteredStudents = students.filter((student: any) =>
+    student.Name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    student.RollNo.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Routes>
       <Route path="/" element={
-        <div className="min-h-screen w-full p-6 bg-[#0a0a0a]">
+        <div 
+          className="min-h-screen w-full bg-[#020617] bg-mesh p-6 relative overflow-hidden"
+          onMouseMove={handleMouseMove}
+        >
+          <motion.div
+            className="pointer-events-none fixed inset-0"
+            style={{
+              background: "radial-gradient(600px circle at var(--x) var(--y), rgba(139, 92, 246, 0.15), transparent 40%)",
+              x: spotlightX,
+              y: spotlightY,
+            }}
+            animate={{
+              '--x': spotlightX,
+              '--y': spotlightY,
+            } as any}
+          />
+          
+          {/* Add a second spotlight with different color and size */}
+          <motion.div
+            className="pointer-events-none fixed inset-0"
+            style={{
+              background: "radial-gradient(800px circle at var(--x) var(--y), rgba(99, 102, 241, 0.12), transparent 40%)",
+              x: spotlightX,
+              y: spotlightY,
+            }}
+            animate={{
+              '--x': spotlightX,
+              '--y': spotlightY,
+            } as any}
+          />
+
+          <AnimatePresence>
           {notification && (
             <motion.div
               initial={{ opacity: 0, y: -100 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -100 }}
-              className={`fixed top-4 right-4 z-50 rounded-lg shadow-lg px-6 py-3 text-white ${
-                notification.type === 'success' 
-                  ? 'bg-green-500/90 border border-green-600' 
-                  : 'bg-red-500/90 border border-red-600'
-              }`}
+                className="fixed top-4 right-4 z-50 glass-effect rounded-lg px-6 py-3 text-white"
             >
               <div className="flex items-center gap-2">
                 {notification.type === 'success' ? (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <motion.svg
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1, rotate: 360 }}
+                      className="w-5 h-5 text-green-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    </motion.svg>
+                  ) : (
+                    <motion.svg
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="w-5 h-5 text-red-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                    </motion.svg>
                 )}
                 <span>{notification.message}</span>
               </div>
             </motion.div>
           )}
+          </AnimatePresence>
 
           <motion.div
             initial="hidden"
             animate="visible"
             variants={containerVariants}
+            className="max-w-7xl mx-auto relative z-10"
           >
             <motion.div 
               variants={itemVariants}
               className="text-center mb-8"
             >
-              <h1 className="text-4xl font-bold mb-2">
-                <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
-                  bg-clip-text text-transparent inline-block relative drop-shadow-[0_0_10px_rgba(236,72,153,0.3)]">
+              <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-white">
                   Attendance Management III-C
-                </span>
               </h1>
-              <p className=" text-lg animate-gradient bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-[length:200%_auto] 
-                bg-clip-text text-transparent inline-block">
+              <p className="text-lg text-white/70">
                 Your gateway to student attendance tracking
               </p>
             </motion.div>
 
             <motion.div 
               variants={itemVariants}
-              className="h-[28rem] overflow-hidden rounded-xl shadow-2xl bg-gray-800 
-                border border-pink-500/20 shadow-pink-500/10"
+              className="mb-6"
             >
-              <div className="overflow-y-auto h-full">
-                <table className="min-w-full h-full table-auto animate-slideInFromRight">
-                  <thead className="sticky top-0 bg-gradient-to-r from-pink-900 via-purple-900 to-pink-900 z-10">
-                    <tr className="border-b border-pink-500/30">
-                      <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+              <div className="gradient-border">
+                <div className="glass-effect p-4 rounded-xl relative">
+                  <div className="spotlight"></div>
+                  <div className="relative">
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Search by name or roll number..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-10 py-2 bg-[#0f172a] text-white border border-indigo-500/40 rounded-lg 
+                          placeholder-indigo-300/50 focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-all"
+                      />
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery("")}
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-indigo-400 hover:text-white"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    {searchQuery && (
+                      <div className="mt-2 text-sm text-white/70 bg-[#1f1f2e] px-3 py-1 rounded-md inline-block">
+                        Found: {filteredStudents.length} student{filteredStudents.length !== 1 ? 's' : ''}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              variants={itemVariants}
+              className="gradient-border"
+            >
+              <div className="glass-effect rounded-xl overflow-hidden relative">
+                <div className="spotlight"></div>
+                <div className="relative">
+                  <div className="overflow-x-auto max-h-[70vh]">
+                    <table className="min-w-full divide-y divide-indigo-500/30">
+                      <thead>
+                        <tr>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider w-[60px] sticky left-0 bg-[#0f172a] z-20">
                         S No
                       </th>
-                      <th className="px-4 py-4 text-pink-200 font-bold tracking-wider whitespace-nowrap sticky left-0 
-                        bg-gradient-to-r from-pink-900 via-purple-900 to-pink-900">
+                          <th className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider w-[180px] sticky left-[60px] bg-[#0f172a] z-20">
                         Student Name
                       </th>
-                      <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                          <th className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[120px]">
                         Roll No
                       </th>
-                      <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
+                          <th className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[150px]">
                         Reg No
                       </th>
-                      <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
-                        Present
+                          {["Present", "Absent", "Leave", "On Duty(INTERNAL)", "On Duty(EXTERNAL)", "Late"].map((header) => (
+                            <th key={header} className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[150px]">
+                              {header}
                       </th>
-                      <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
-                        Absent
-                      </th>
-                      <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
-                        Leave
-                      </th>
-                      <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
-                        On Duty(INTERNAL)
-                      </th><th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r npmfrom-pink-400 to-pink-200 font-bold tracking-wider">
-                        On Duty(EXTERNAL)
-                      </th>
-                      <th className="px-4 py-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-pink-200 font-bold tracking-wider">
-                        Late
-                      </th>
+                          ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-pink-500/20">
-                    {students.map((student: any, index) => (
-                      <tr key={index} className="text-center hover:bg-gray-700 transition-colors">
-                        <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.SNo}</td>
-                        <td className="border-b border-pink-500/20 p-2 text-gray-200 sticky left-0 
-                          bg-gray-800 whitespace-nowrap font-medium">
-                          {student.Name}
-                        </td>
-                        <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.RollNo}</td>
-                        <td className="border-b border-pink-500/20 p-2 text-gray-200">{student.RegNo}</td>
-                        <td className="border-b border-pink-500/20 p-2">
-                          <button
-                            onClick={() => handleAttendanceChange(student.SNo, "Present")}
-                            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
-                              ${attendance[student.SNo] === "Present" 
-                                ? 'bg-green-500 text-white' 
-                                : 'bg-gray-700 text-gray-400'}`}
+                      <tbody className="divide-y divide-indigo-500/20">
+                        {filteredStudents.map((student: any, index) => (
+                          <motion.tr
+                            key={student.SNo}
+                            variants={tableRowVariants}
+                            custom={index}
+                            className="hover:bg-indigo-500/10 transition-colors"
                           >
-                            Present
-                          </button>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80 w-[60px] sticky left-0 bg-[#0f172a] z-10">
+                              {student.SNo}
                         </td>
-                        <td className="border-b border-pink-500/20 p-2">
-                          <button
-                            onClick={() => handleAttendanceChange(student.SNo, "Absent")}
-                            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
-                              ${attendance[student.SNo] === "Absent" 
-                                ? 'bg-red-500 text-white' 
-                                : 'bg-gray-700 text-gray-400'}`}
-                          >
-                            Absent
-                          </button>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white w-[180px] sticky left-[60px] bg-[#0f172a] z-10">
+                              {student.Name}
                         </td>
-                        <td className="border-b border-pink-500/20 p-2">
-                          <button
-                            onClick={() => handleAttendanceChange(student.SNo, "Leave")}
-                            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
-                              ${attendance[student.SNo] === "Leave" 
-                                ? 'bg-yellow-500 text-white' 
-                                : 'bg-gray-700 text-gray-400'}`}
-                          >
-                            Leave
-                          </button>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80 min-w-[120px]">
+                              {student.RollNo}
                         </td>
-                        <td className="border-b border-pink-500/20 p-2">
-                          <button
-                            onClick={() => handleAttendanceChange(student.SNo, "On Duty(INTERNAL)")}
-                            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
-                              ${attendance[student.SNo] === "On Duty(INTERNAL)" 
-                                ? 'bg-purple-500 text-white' 
-                                : 'bg-gray-700 text-gray-400'}`}
-                          >
-                            On Duty (Internal)
-                          </button>
-                        
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80 min-w-[150px]">
+                              {student.RegNo}
                         </td>
-                        <td className="border-b border-pink-500/20 p-2">
-                        <button
-                            onClick={() => handleAttendanceChange(student.SNo, "On Duty(EXTERNAL)")}
-                            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
-                              ${attendance[student.SNo] === "On Duty(EXTERNAL)" 
-                                ? 'bg-purple-900 text-white' 
-                                : 'bg-gray-700 text-gray-400'}`}
-                          >
-                            On Duty(External)
-                          </button>
+                            {["Present", "Absent", "Leave", "On Duty(INTERNAL)", "On Duty(EXTERNAL)", "Late"].map((status) => (
+                              <td key={status} className="px-6 py-4 whitespace-nowrap min-w-[150px]">
+                                <motion.button
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  onClick={() => handleAttendanceChange(student.SNo, status)}
+                                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                                    attendance[student.SNo] === status
+                                      ? status === "Present" ? "status-present" :
+                                        status === "Absent" ? "status-absent" :
+                                        status === "Leave" ? "status-leave" :
+                                        status === "On Duty(INTERNAL)" || status === "On Duty(EXTERNAL)" ? "status-od" :
+                                        "status-late"
+                                      : "bg-[#11111b]/50 text-indigo-300 border border-indigo-500/20 hover:bg-indigo-500/20"
+                                  }`}
+                                >
+                                  {status}
+                                </motion.button>
                         </td>
-                        <td className="border-b border-pink-500/20 p-2">
-                          <button
-                            onClick={() => handleAttendanceChange(student.SNo, "Late")}
-                            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200
-                              ${attendance[student.SNo] === "Late" 
-                                ? 'bg-orange-500 text-white' 
-                                : 'bg-gray-700 text-gray-400'}`}
-                          >
-                            Late
-                          </button>
-                        </td>
-                      </tr>
+                            ))}
+                          </motion.tr>
                     ))}
                   </tbody>
                 </table>
+                  </div>
+                </div>
               </div>
             </motion.div>
 
             <motion.div 
               variants={itemVariants}
-              className="mt-6 p-4 sm:p-6 bg-black/40 rounded-xl shadow-2xl border border-pink-500/20 text-gray-300
-                shadow-pink-500/10"
+              className="mt-8"
             >
-              <h2 className="text-xl sm:text-2xl font-bold mb-4">
-                <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
-                  bg-clip-text text-transparent inline-block">
-                  Attendance Summary
-                </span>
-              </h2>
-              <pre className="bg-black/60 p-2 sm:p-4 rounded-lg font-mono text-xs sm:text-sm overflow-x-auto border border-pink-500/20">
-                {attendanceSummary}
-              </pre>
+              <div className="gradient-border">
+                <div className="glass-effect p-6 rounded-xl relative">
+                  <div className="spotlight"></div>
+                  <h2 className="text-2xl font-bold mb-4 text-white">
+                    Attendance Summary
+                  </h2>
+                  <pre className="bg-[#0f172a]/50 p-4 rounded-lg font-mono text-sm text-white/90 overflow-x-auto border border-violet-500/20">
+                    {attendanceSummary}
+                  </pre>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                    {[
+                      { label: "Copy Summary", onClick: copyToClipboard, icon: "clipboard", className: "button-copy" },
+                      { label: "Save to Database", onClick: saveToDatabase, icon: "save", className: "button-save" },
+                      { label: "Share on WhatsApp", onClick: shareOnWhatsApp, icon: "share", className: "button-share" },
+                      { label: "View History", onClick: () => navigate('/login'), icon: "history", className: "button-view" }
+                    ].map(({ label, onClick, icon, className }) => (
+                      <motion.button
+                        key={label}
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={onClick}
+                        className={`${className} text-white px-6 py-3 rounded-lg font-medium hover-glow
+                          flex items-center justify-center gap-2`}
+                      >
+                        <span>{label}</span>
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
 
               <motion.div 
                 variants={itemVariants}
-                className="flex flex-col sm:flex-row gap-4 mt-6"
-              >
-                <button 
-                  onClick={copyToClipboard} 
-                  className="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-pink-500/50 transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <span>Copy Summary</span>
-                  {copied && (
-                    <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white 
-                      text-sm px-3 py-1 rounded-md shadow-lg">
-                      Copied!
-                    </div>
-                  )}
-                </button>
-
-                <button 
-                  onClick={saveToDatabase} 
-                  className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-blue-500/50 transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <span>Save to Database</span>
-                </button>
-
-                <button 
-                  onClick={shareOnWhatsApp} 
-                  className="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-green-500/50 transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <span>Share on WhatsApp</span>
-                </button>
-
-                <button 
-                  onClick={() => navigate('/login')} 
-                  className="w-full sm:w-auto bg-purple-500 hover:bg-purple-600 text-white px-6 py-2.5 rounded-lg 
-                    shadow-lg hover:shadow-purple-500/50 transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <span>View History</span>
-                </button>
-              </motion.div>
-              <h1 className="mt-6 origin-bottom-right font-bold text-2xl relative">
-                <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
-                  bg-clip-text text-transparent inline-block relative">
-                  Developed By SANTHOSH 
-                </span>
-              </h1>
+              className="mt-8 text-center"
+            >
+              <p className="text-xl font-bold text-gradient">
+                Developed By SANTHOSH
+              </p>
             </motion.div>
           </motion.div>
         </div>
