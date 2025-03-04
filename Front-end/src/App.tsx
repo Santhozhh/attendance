@@ -304,25 +304,25 @@ const copyToClipboard = () => {
                     <table className="min-w-full divide-y divide-indigo-500/30">
                       <thead>
                         <tr>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider w-[60px] sticky left-0 bg-[#0f172a] z-20">
-                        S No
-                      </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider w-[180px] sticky left-[60px] bg-[#0f172a] z-20">
-                        Student Name
-                      </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[120px]">
-                        Roll No
-                      </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[150px]">
-                        Reg No
-                      </th>
+                          <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider w-[40px] sm:w-[60px] sticky left-0 bg-[#0f172a] z-20">
+                            S No
+                          </th>
+                          <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider w-[140px] sm:w-[180px] sticky left-[40px] sm:left-[60px] bg-[#0f172a] z-20">
+                            Student Name
+                          </th>
+                          <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[100px]">
+                            Roll No
+                          </th>
+                          <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[120px]">
+                            Reg No
+                          </th>
                           {["Present", "Absent", "Leave", "On Duty(INTERNAL)", "On Duty(EXTERNAL)", "Late"].map((header) => (
-                            <th key={header} className="px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[150px]">
+                            <th key={header} className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[120px]">
                               {header}
-                      </th>
+                            </th>
                           ))}
-                    </tr>
-                  </thead>
+                        </tr>
+                      </thead>
                       <tbody className="divide-y divide-indigo-500/20">
                         {filteredStudents.map((student: any, index) => (
                           <motion.tr
@@ -331,20 +331,20 @@ const copyToClipboard = () => {
                             custom={index}
                             className="hover:bg-indigo-500/10 transition-colors"
                           >
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80 w-[60px] sticky left-0 bg-[#0f172a] z-10">
+                            <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-white/80 w-[40px] sm:w-[60px] sticky left-0 bg-[#0f172a] z-10">
                               {student.SNo}
-                        </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white w-[180px] sticky left-[60px] bg-[#0f172a] z-10">
+                            </td>
+                            <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white w-[140px] sm:w-[180px] sticky left-[40px] sm:left-[60px] bg-[#0f172a] z-10">
                               {student.Name}
-                        </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80 min-w-[120px]">
+                            </td>
+                            <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-white/80 min-w-[100px]">
                               {student.RollNo}
-                        </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80 min-w-[150px]">
+                            </td>
+                            <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-white/80 min-w-[120px]">
                               {student.RegNo}
-                        </td>
+                            </td>
                             {["Present", "Absent", "Leave", "On Duty(INTERNAL)", "On Duty(EXTERNAL)", "Late"].map((status) => (
-                              <td key={status} className="px-6 py-4 whitespace-nowrap min-w-[150px]">
+                              <td key={status} className="px-3 sm:px-6 py-4 whitespace-nowrap min-w-[120px]">
                                 <motion.button
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
@@ -361,12 +361,12 @@ const copyToClipboard = () => {
                                 >
                                   {status}
                                 </motion.button>
-                        </td>
+                              </td>
                             ))}
                           </motion.tr>
-                    ))}
-                  </tbody>
-                </table>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
