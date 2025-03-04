@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config');
 const AttendanceCount = require('./schema');
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
 const app = express();
 
@@ -21,10 +25,73 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
+// User Schema
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: String, enum: ['admin', 'user'], default: 'user' }
+});
+
+const User = mongoose.model("User", userSchema);
+
+// Authentication Middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Access denied. No token provided.' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Invalid token.' });
+    }
+    req.user = user;
+    next();
+  });
+};
+
+// Authentication Routes
+app.post("/api/auth/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Find user
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Check password
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate token
+    const token = jwt.sign(
+      { id: user._id, username: user.username, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.json({ token, user: { username: user.username, role: user.role } });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Protected Routes
+app.get("/api/auth/verify", authenticateToken, (req, res) => {
+  res.json({ user: req.user });
+});
+
 // Routes
 
 // Save daily attendance count
-app.post('/api/', async (req, res) => {
+app.post('/api/', authenticateToken, async (req, res) => {
   try {
     const {
       presentCount,
@@ -59,7 +126,7 @@ app.post('/api/', async (req, res) => {
 });
 
 // Get attendance history with optional date range
-app.get('/api/', async (req, res) => {
+app.get('/api/', authenticateToken, async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
     let query = {};
@@ -81,7 +148,7 @@ app.get('/api/', async (req, res) => {
 });
 
 // Get student attendance history
-app.get('/api/student', async (req, res) => {
+app.get('/api/student', authenticateToken, async (req, res) => {
   try {
     const { name, rollNo } = req.query;
     let query = {};
@@ -168,7 +235,7 @@ app.get('/api/student', async (req, res) => {
 });
 
 // Get attendance for a specific date
-app.get('/api/:date', async (req, res) => {
+app.get('/api/:date', authenticateToken, async (req, res) => {
   try {
     const date = new Date(req.params.date);
     const startOfDay = new Date(date.setHours(0, 0, 0, 0));
@@ -192,7 +259,7 @@ app.get('/api/:date', async (req, res) => {
 });
 
 // Get attendance statistics
-app.get('/api/stats/summary', async (req, res) => {
+app.get('/api/stats/summary', authenticateToken, async (req, res) => {
   try {
     const stats = await AttendanceCount.aggregate([
       {
@@ -215,7 +282,7 @@ app.get('/api/stats/summary', async (req, res) => {
 });
 
 // Delete attendance record
-app.delete('/api/:id', async (req, res) => {
+app.delete('/api/:id', authenticateToken, async (req, res) => {
   try {
     const record = await AttendanceCount.findByIdAndDelete(req.params.id);
     
@@ -229,6 +296,27 @@ app.delete('/api/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// Create default admin user if not exists
+const createDefaultAdmin = async () => {
+  try {
+    const adminExists = await User.findOne({ username: 'admin' });
+    if (!adminExists) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('admin123', salt);
+      await User.create({
+        username: 'admin',
+        password: hashedPassword,
+        role: 'admin'
+      });
+      console.log('Default admin user created');
+    }
+  } catch (error) {
+    console.error('Error creating default admin:', error);
+  }
+};
+
+createDefaultAdmin();
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
