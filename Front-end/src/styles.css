@@ -325,4 +325,41 @@ th, td {
 
 .button-view:hover {
   box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+/* Add glow effect */
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5)) 
+          drop-shadow(0 0 12px rgba(139, 92, 246, 0.3));
+}
+
+/* Toast notification styles */
+@keyframes toast-slide-in {
+  from {
+    transform: translateY(100%) translateX(-50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) translateX(-50%);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-slide-out {
+  from {
+    transform: translateY(0) translateX(-50%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%) translateX(-50%);
+    opacity: 0;
+  }
+}
+
+.toast-enter {
+  animation: toast-slide-in 0.4s ease-out forwards;
+}
+
+.toast-exit {
+  animation: toast-slide-out 0.4s ease-in forwards;
 } 

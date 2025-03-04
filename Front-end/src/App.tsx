@@ -100,14 +100,18 @@ Have a  Very Nice Day`;
   const [copied, setCopied] = useState(false);
 
 const copyToClipboard = () => {
-  navigator.clipboard.writeText(attendanceSummary);
-  setCopied(true);
-  setTimeout(() => setCopied(false), 6000); 
+  navigator.clipboard.writeText(attendanceSummary)
+    .then(() => {
+      showNotification('Summary copied to clipboard!', 'success');
+    })
+    .catch(() => {
+      showNotification('Failed to copy summary. Please try again.', 'error');
+    });
 };
 
   const showNotification = (message: string, type: 'success' | 'error') => {
     setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
+    setTimeout(() => setNotification(null), 4000);
   };
 
   const saveToDatabase = async () => {
@@ -227,44 +231,6 @@ const copyToClipboard = () => {
               '--y': spotlightY,
             } as any}
           />
-
-          <AnimatePresence>
-          {notification && (
-            <motion.div
-              initial={{ opacity: 0, y: -100 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -100 }}
-                className="fixed top-4 right-4 z-50 glass-effect rounded-lg px-6 py-3 text-white"
-            >
-              <div className="flex items-center gap-2">
-                {notification.type === 'success' ? (
-                    <motion.svg
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1, rotate: 360 }}
-                      className="w-5 h-5 text-green-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </motion.svg>
-                  ) : (
-                    <motion.svg
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="w-5 h-5 text-red-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </motion.svg>
-                )}
-                <span>{notification.message}</span>
-              </div>
-            </motion.div>
-          )}
-          </AnimatePresence>
 
           <motion.div
             initial="hidden"
@@ -414,34 +380,109 @@ const copyToClipboard = () => {
                 <div className="glass-effect p-6 rounded-xl relative">
                   <div className="spotlight"></div>
                   <h2 className="text-2xl font-bold mb-4 text-white">
-                    Attendance Summary
-                  </h2>
+                  Attendance Summary
+              </h2>
                   <pre className="bg-[#0f172a]/50 p-4 rounded-lg font-mono text-sm text-white/90 overflow-x-auto border border-violet-500/20">
-                    {attendanceSummary}
-                  </pre>
+                {attendanceSummary}
+              </pre>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 relative">
                     {[
                       { label: "Copy Summary", onClick: copyToClipboard, icon: "clipboard", className: "button-copy" },
                       { label: "Save to Database", onClick: saveToDatabase, icon: "save", className: "button-save" },
                       { label: "Share on WhatsApp", onClick: shareOnWhatsApp, icon: "share", className: "button-share" },
                       { label: "View History", onClick: () => navigate('/login'), icon: "history", className: "button-view" }
                     ].map(({ label, onClick, icon, className }) => (
-                      <motion.button
-                        key={label}
-                        whileHover={{ scale: 1.02, y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={onClick}
-                        className={`${className} text-white px-6 py-3 rounded-lg font-medium hover-glow
-                          flex items-center justify-center gap-2`}
-                      >
-                        <span>{label}</span>
-                      </motion.button>
+                      <div key={label} className="relative">
+                        <motion.button
+                          whileHover={{ scale: 1.02, y: -2 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={onClick}
+                          className={`${className} text-white px-6 py-3 rounded-lg font-medium hover-glow w-full
+                            flex items-center justify-center gap-2`}
+                        >
+                          <span>{label}</span>
+                        </motion.button>
+                      </div>
                     ))}
                   </div>
                 </div>
               </div>
             </motion.div>
+
+            {notification && (
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
+              >
+                <div className="glass-effect px-6 py-4 rounded-xl border-2 border-indigo-500/50 shadow-2xl shadow-indigo-500/20 backdrop-blur-xl bg-[#0f172a] min-w-[300px]">
+                  <div className="flex items-center gap-3">
+                    {notification.type === 'success' ? (
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ 
+                            scale: 1,
+                            rotate: 360,
+                            transition: { duration: 0.5 }
+                          }}
+                          className="w-6 h-6 text-emerald-400"
+                        >
+                          <svg
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            className="w-full h-full drop-shadow-glow"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth="3" 
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        </motion.div>
+                      </div>
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-rose-500/20 flex items-center justify-center">
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ 
+                            scale: 1,
+                            transition: { duration: 0.3 }
+                          }}
+                          className="w-6 h-6 text-rose-400"
+                        >
+                          <svg
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            className="w-full h-full drop-shadow-glow"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth="3" 
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </motion.div>
+                      </div>
+                    )}
+                    <div className="flex flex-col">
+                      <span className="text-lg font-bold text-white drop-shadow-glow">
+                        {notification.type === 'success' ? 'Success!' : 'Error!'}
+                      </span>
+                      <span className="text-sm text-white/80">
+                        {notification.message}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
 
               <motion.div 
                 variants={itemVariants}
