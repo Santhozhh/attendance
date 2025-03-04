@@ -1,7 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config');
-const AttendanceCount = require('./schema');
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -22,8 +20,13 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Connect to MongoDB
-connectDB();
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
 
 // User Schema
 const userSchema = new mongoose.Schema({
@@ -33,6 +36,27 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
+
+// Attendance Schema
+const attendanceSchema = new mongoose.Schema({
+  date: { type: Date, default: Date.now },
+  presentCount: { type: Number, required: true },
+  absentCount: { type: Number, required: true },
+  leaveCount: { type: Number, required: true },
+  odInternalCount: { type: Number, required: true },
+  odExternalCount: { type: Number, required: true },
+  lateCount: { type: Number, required: true },
+  totalStudents: { type: Number, required: true },
+  attendanceData: { type: String, required: true },
+  studentRecords: [{
+    studentId: String,
+    rollNo: String,
+    name: String,
+    status: String
+  }]
+});
+
+const AttendanceCount = mongoose.model("AttendanceCount", attendanceSchema);
 
 // Authentication Middleware
 const authenticateToken = (req, res, next) => {
@@ -88,8 +112,6 @@ app.get("/api/auth/verify", authenticateToken, (req, res) => {
   res.json({ user: req.user });
 });
 
-// Routes
-
 // Save daily attendance count
 app.post('/api/', authenticateToken, async (req, res) => {
   try {
@@ -121,11 +143,12 @@ app.post('/api/', authenticateToken, async (req, res) => {
     const savedRecord = await attendanceCount.save();
     res.status(201).json(savedRecord);
   } catch (error) {
+    console.error('Save error:', error);
     res.status(500).json({ message: error.message });
   }
 });
 
-// Get attendance history with optional date range
+// Get attendance history
 app.get('/api/', authenticateToken, async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
@@ -143,93 +166,7 @@ app.get('/api/', authenticateToken, async (req, res) => {
       .limit(30);
     res.json(records);
   } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Get student attendance history
-app.get('/api/student', authenticateToken, async (req, res) => {
-  try {
-    const { name, rollNo } = req.query;
-    let query = {};
-
-    if (name) {
-      query['studentRecords.name'] = { $regex: name, $options: 'i' };
-    }
-    if (rollNo) {
-      query['studentRecords.rollNo'] = rollNo;
-    }
-
-    const records = await AttendanceCount.find(query).sort({ date: -1 });
-
-    if (records.length === 0) {
-      return res.status(404).json({ message: 'No records found for this student' });
-    }
-
-    // Calculate statistics
-    const studentStats = {
-      totalDays: records.length,
-      presentDays: 0,
-      absentDays: 0,
-      leaveDays: 0,
-      odInternalDays: 0,
-      odExternalDays: 0,
-      lateDays: 0,
-      dates: {
-        present: [],
-        absent: [],
-        leave: [],
-        odInternal: [],
-        odExternal: [],
-        late: []
-      }
-    };
-
-    records.forEach(record => {
-      const studentRecord = record.studentRecords.find(sr => 
-        (name && sr.name.toLowerCase().includes(name.toLowerCase())) || 
-        (rollNo && sr.rollNo === rollNo)
-      );
-
-      if (studentRecord) {
-        const date = record.date.toLocaleDateString();
-        switch (studentRecord.status) {
-          case 'Present':
-            studentStats.presentDays++;
-            studentStats.dates.present.push(date);
-            break;
-          case 'Absent':
-            studentStats.absentDays++;
-            studentStats.dates.absent.push(date);
-            break;
-          case 'Leave':
-            studentStats.leaveDays++;
-            studentStats.dates.leave.push(date);
-            break;
-          case 'On Duty(INTERNAL)':
-            studentStats.odInternalDays++;
-            studentStats.dates.odInternal.push(date);
-            break;
-          case 'On Duty(EXTERNAL)':
-            studentStats.odExternalDays++;
-            studentStats.dates.odExternal.push(date);
-            break;
-          case 'Late':
-            studentStats.lateDays++;
-            studentStats.dates.late.push(date);
-            break;
-        }
-      }
-    });
-
-    res.json({
-      studentInfo: records[0].studentRecords.find(sr => 
-        (name && sr.name.toLowerCase().includes(name.toLowerCase())) || 
-        (rollNo && sr.rollNo === rollNo)
-      ),
-      statistics: studentStats
-    });
-  } catch (error) {
+    console.error('Fetch error:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -254,29 +191,7 @@ app.get('/api/:date', authenticateToken, async (req, res) => {
     
     res.json(record);
   } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Get attendance statistics
-app.get('/api/stats/summary', authenticateToken, async (req, res) => {
-  try {
-    const stats = await AttendanceCount.aggregate([
-      {
-        $group: {
-          _id: null,
-          avgPresent: { $avg: '$presentCount' },
-          avgAbsent: { $avg: '$absentCount' },
-          avgLeave: { $avg: '$leaveCount' },
-          avgODInternal: { $avg: '$odInternalCount' },
-          avgODExternal: { $avg: '$odExternalCount' },
-          totalDays: { $sum: 1 }
-        }
-      }
-    ]);
-    
-    res.json(stats[0] || {});
-  } catch (error) {
+    console.error('Date fetch error:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -317,6 +232,11 @@ const createDefaultAdmin = async () => {
 };
 
 createDefaultAdmin();
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
