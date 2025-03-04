@@ -8,15 +8,23 @@ import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 const API_URL = import.meta.env.VITE_API_URL;
 
+interface Student {
+  SNo: string;
+  Name: string;
+  RollNo: string;
+  RegNo: string;
+}
+
 const App = () => {
   const navigate = useNavigate();
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
   const [date, setDate] = useState("");
   const [notification, setNotification] = useState<{
     message: string;
     type: 'success' | 'error';
+    color?: string;
   } | null>(null);
 
   // Add mouse position state
@@ -51,7 +59,32 @@ const App = () => {
   }, []);
 
   const handleAttendanceChange = (sno: string, status: string) => {
+    const student = students.find((s: Student) => s.SNo === sno);
+    if (!student) return;
+    
     setAttendance((prev) => ({ ...prev, [sno]: status }));
+    
+    // Show notification for status change
+    const statusColors = {
+      'Present': 'emerald',
+      'Absent': 'rose',
+      'Leave': 'amber',
+      'On Duty(INTERNAL)': 'violet',
+      'On Duty(EXTERNAL)': 'purple',
+      'Late': 'orange'
+    };
+    
+    const statusMessages = {
+      'Present': 'is now marked Present',
+      'Absent': 'is marked Absent',
+      'Leave': 'is on Leave',
+      'On Duty(INTERNAL)': 'is on Internal OD',
+      'On Duty(EXTERNAL)': 'is on External OD',
+      'Late': 'is marked Late'
+    };
+    
+    const message = `${student.Name} ${statusMessages[status as keyof typeof statusMessages]}`;
+    showNotification(message, 'success', statusColors[status as keyof typeof statusColors]);
   };
 
   const totalStudents = students.length;
@@ -109,8 +142,8 @@ const copyToClipboard = () => {
     });
 };
 
-  const showNotification = (message: string, type: 'success' | 'error') => {
-    setNotification({ message, type });
+  const showNotification = (message: string, type: 'success' | 'error', color?: string) => {
+    setNotification({ message, type, color });
     setTimeout(() => setNotification(null), 4000);
   };
 
@@ -205,7 +238,7 @@ const copyToClipboard = () => {
           className="min-h-screen w-full bg-[#020617] bg-mesh p-6 relative overflow-hidden"
           onMouseMove={handleMouseMove}
         >
-          <motion.div
+            <motion.div
             className="pointer-events-none fixed inset-0"
             style={{
               background: "radial-gradient(600px circle at var(--x) var(--y), rgba(139, 92, 246, 0.15), transparent 40%)",
@@ -301,72 +334,73 @@ const copyToClipboard = () => {
                 <div className="spotlight"></div>
                 <div className="relative">
                   <div className="overflow-x-auto max-h-[70vh]">
-                    <table className="min-w-full divide-y divide-indigo-500/30">
+                    <table className="min-w-full divide-y divide-gray-200 bg-white">
                       <thead>
                         <tr>
-                          <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider w-[40px] sm:w-[60px] sticky left-0 bg-[#0f172a] z-20">
-                            S No
-                          </th>
-                          <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider w-[140px] sm:w-[180px] sticky left-[40px] sm:left-[60px] bg-[#0f172a] z-20">
-                            Student Name
-                          </th>
-                          <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[100px]">
-                            Roll No
-                          </th>
-                          <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[120px]">
-                            Reg No
-                          </th>
+                          <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[40px] sm:w-[60px] sticky left-0 bg-white z-20">
+                        S No
+                      </th>
+                          <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-[25vw] sm:w-[180px] sticky left-[40px] sm:left-[60px] bg-white z-20">
+                        Student Name
+                      </th>
+                          <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider min-w-[100px]">
+                        Roll No
+                      </th>
+                          <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider min-w-[120px]">
+                        Reg No
+                      </th>
                           {["Present", "Absent", "Leave", "On Duty(INTERNAL)", "On Duty(EXTERNAL)", "Late"].map((header) => (
-                            <th key={header} className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-white/90 uppercase tracking-wider min-w-[120px]">
+                            <th key={header} className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider min-w-[120px]">
                               {header}
-                            </th>
+                      </th>
                           ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-indigo-500/20">
+                    </tr>
+                  </thead>
+                      <tbody className="divide-y divide-gray-200 bg-white">
                         {filteredStudents.map((student: any, index) => (
                           <motion.tr
                             key={student.SNo}
                             variants={tableRowVariants}
                             custom={index}
-                            className="hover:bg-indigo-500/10 transition-colors"
+                            className="hover:bg-gray-50 transition-colors"
                           >
-                            <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-white/80 w-[40px] sm:w-[60px] sticky left-0 bg-[#0f172a] z-10">
+                            <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 w-[40px] sm:w-[60px] sticky left-0 bg-white z-10">
                               {student.SNo}
-                            </td>
-                            <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white w-[140px] sm:w-[180px] sticky left-[40px] sm:left-[60px] bg-[#0f172a] z-10">
+                        </td>
+                            <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[25vw] sm:w-[180px] sticky left-[40px] sm:left-[60px] bg-white z-10">
                               {student.Name}
-                            </td>
-                            <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-white/80 min-w-[100px]">
+                        </td>
+                            <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 min-w-[100px]">
                               {student.RollNo}
-                            </td>
-                            <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-white/80 min-w-[120px]">
+                        </td>
+                            <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-700 min-w-[120px]">
                               {student.RegNo}
-                            </td>
+                        </td>
                             {["Present", "Absent", "Leave", "On Duty(INTERNAL)", "On Duty(EXTERNAL)", "Late"].map((status) => (
-                              <td key={status} className="px-3 sm:px-6 py-4 whitespace-nowrap min-w-[120px]">
+                              <td key={status} className="px-2 sm:px-6 py-4 whitespace-nowrap min-w-[120px]">
                                 <motion.button
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
                                   onClick={() => handleAttendanceChange(student.SNo, status)}
-                                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                                  className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                                     attendance[student.SNo] === status
                                       ? status === "Present" ? "status-present" :
                                         status === "Absent" ? "status-absent" :
                                         status === "Leave" ? "status-leave" :
-                                        status === "On Duty(INTERNAL)" || status === "On Duty(EXTERNAL)" ? "status-od" :
+                                        status === "On Duty(INTERNAL)" ? "status-od" :
+                                        status === "On Duty(EXTERNAL)" ? "status-od-external" :
                                         "status-late"
-                                      : "bg-[#11111b]/50 text-indigo-300 border border-indigo-500/20 hover:bg-indigo-500/20"
+                                      : "attendance-button-unselected"
                                   }`}
                                 >
                                   {status}
                                 </motion.button>
-                              </td>
+                        </td>
                             ))}
                           </motion.tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    ))}
+                  </tbody>
+                </table>
                   </div>
                 </div>
               </div>
@@ -411,16 +445,18 @@ const copyToClipboard = () => {
             </motion.div>
 
             {notification && (
-              <motion.div
+              <motion.div 
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
                 className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
               >
-                <div className="glass-effect px-6 py-4 rounded-xl border-2 border-indigo-500/50 shadow-2xl shadow-indigo-500/20 backdrop-blur-xl bg-[#0f172a] min-w-[300px]">
+                <div className="glass-effect px-6 py-4 rounded-xl border-2 border-white/10 shadow-2xl backdrop-blur-xl min-w-[300px] bg-[#0f172a]">
                   <div className="flex items-center gap-3">
                     {notification.type === 'success' ? (
-                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                      <div className={`w-10 h-10 rounded-full ${
+                        notification.color ? `bg-${notification.color}-500/30` : 'bg-emerald-500/30'
+                      } flex items-center justify-center`}>
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ 
@@ -428,7 +464,7 @@ const copyToClipboard = () => {
                             rotate: 360,
                             transition: { duration: 0.5 }
                           }}
-                          className="w-6 h-6 text-emerald-400"
+                          className="w-6 h-6 text-white"
                         >
                           <svg
                             fill="none"
@@ -446,14 +482,14 @@ const copyToClipboard = () => {
                         </motion.div>
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-rose-500/20 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-rose-500/30 flex items-center justify-center">
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ 
                             scale: 1,
                             transition: { duration: 0.3 }
                           }}
-                          className="w-6 h-6 text-rose-400"
+                          className="w-6 h-6 text-white"
                         >
                           <svg
                             fill="none"
@@ -472,10 +508,10 @@ const copyToClipboard = () => {
                       </div>
                     )}
                     <div className="flex flex-col">
-                      <span className="text-lg font-bold text-white drop-shadow-glow">
-                        {notification.type === 'success' ? 'Success!' : 'Error!'}
+                      <span className="text-lg font-semibold text-white drop-shadow-glow">
+                        Status Updated
                       </span>
-                      <span className="text-sm text-white/80">
+                      <span className="text-base text-white font-medium">
                         {notification.message}
                       </span>
                     </div>
