@@ -2,152 +2,119 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
   // Check if already authenticated
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      verifyToken(token);
+    if (localStorage.getItem('isAuthenticated') === 'true') {
+      navigate('/history');
     }
   }, [navigate]);
 
-  const verifyToken = async (token: string) => {
-    try {
-      const response = await fetch(`${API_URL}/api/auth/verify`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        navigate('/history');
-      } else {
-        localStorage.removeItem('token');
-      }
-    } catch (error) {
-      console.error('Token verification error:', error);
-      localStorage.removeItem('token');
-    }
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-
-      // Store token and user info
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+    if (username === 'VCET' && password === 'VCET@123') {
+      // Set authentication state
+      localStorage.setItem('isAuthenticated', 'true');
       
-      // Navigate to history page
-      const from = location.state?.from?.pathname || '/history';
+      // Get the redirect path from state or session storage
+      const from = location.state?.from?.pathname || sessionStorage.getItem('redirectPath') || '/history';
+      sessionStorage.removeItem('redirectPath'); // Clean up
+      
       navigate(from);
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'Login failed');
-    } finally {
-      setLoading(false);
+    } else {
+      setError('Invalid username or password');
     }
   };
 
   return (
-    <div className="min-h-screen w-full p-6 bg-white dark:bg-[#0a0a0a] transition-colors duration-300">
-      <div className="max-w-md mx-auto mt-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-pink-500/20"
-        >
-          <h1 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
-            <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
-              bg-clip-text text-transparent inline-block">
-              Login Required
-            </span>
-          </h1>
+    <div className="min-h-screen w-full p-4 sm:p-6 bg-[#0a0a0a] flex items-center justify-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md p-6 sm:p-8 bg-gray-800 rounded-xl shadow-2xl border border-pink-500/20"
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-2">
+          <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
+            bg-clip-text text-transparent inline-block">
+            Login Required
+          </span>
+        </h1>
+        <p className="text-center mb-8 animate-gradient bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-[length:200%_auto] 
+          bg-clip-text text-transparent inline-block">
+          Please enter your password to view attendance history
+        </p>
+
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div>
+            <label className="block text-gray-400 text-sm font-medium mb-2">
+              Username
+            </label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2
+                focus:outline-none focus:border-pink-500 transition-colors"
+              placeholder="Enter username"
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              <span className="animate-gradient bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-[length:200%_auto] 
+                bg-clip-text text-transparent">
+                Password
+              </span>
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2.5
+                focus:outline-none focus:border-pink-500 transition-colors"
+              placeholder="Enter password"
+              required
+            />
+          </div>
 
           {error && (
-            <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded mb-4">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-red-500 text-sm text-center"
+            >
               {error}
-            </div>
+            </motion.p>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                Username
-              </label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2
-                  focus:outline-none focus:border-pink-500 transition-colors"
-                placeholder="Enter username"
-                required
-                disabled={loading}
-              />
-            </div>
+          <div className="space-y-4">
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2.5 rounded-lg
+                shadow-lg hover:from-pink-600 hover:to-purple-600 transition-all duration-200"
+            >
+              Login
+            </button>
 
-            <div>
-              <label className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2
-                  focus:outline-none focus:border-pink-500 transition-colors"
-                placeholder="Enter password"
-                required
-                disabled={loading}
-              />
-            </div>
-
-            <div className="space-y-4">
-              <button
-                type="submit"
-                className="w-full bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-lg transition-colors
-                  disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={loading}
-              >
-                {loading ? 'Logging in...' : 'Login'}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => navigate('/')}
-                className="w-full bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors"
-              >
-                Back to Dashboard
-              </button>
-            </div>
-          </form>
-        </motion.div>
-      </div>
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="w-full bg-gray-700 text-white py-2.5 rounded-lg shadow-lg hover:bg-gray-600
+                transition-all duration-200"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+        </form>
+      </motion.div>
     </div>
   );
 };

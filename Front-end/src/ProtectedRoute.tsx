@@ -1,15 +1,24 @@
 import { Navigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL;
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
   const location = useLocation();
-  const token = localStorage.getItem('token');
 
-  if (!token) {
-    // Save the attempted location
-    sessionStorage.setItem('redirectPath', location.pathname);
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  useEffect(() => {
+    // If not authenticated and trying to access a protected route, store the attempted path
+    if (!isAuthenticated) {
+      sessionStorage.setItem('redirectPath', location.pathname);
+    }
+  }, [isAuthenticated, location]);
+
+  if (!isAuthenticated) {
+    // Redirect to login with the current location stored in state
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   return <>{children}</>;
