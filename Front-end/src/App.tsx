@@ -23,9 +23,9 @@ const App = () => {
       <Route 
         path="/history" 
         element={
-          <ProtectedRoute>
-            <Attendance />
-          </ProtectedRoute>
+        <ProtectedRoute>
+          <Attendance />
+        </ProtectedRoute>
         } 
       />
     </Routes>

@@ -41,7 +41,13 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
-    navigate('/login');
+    navigate('/');
+  };
+
+  const handleDelete = () => {
+    // Clear all attendance records
+    setStudents([]);
+    showNotification('All records deleted successfully!', 'success');
   };
 
   useEffect(() => {
@@ -239,8 +245,7 @@ Have a Very Nice Day`;
       <div className="flex justify-end items-center gap-4 mb-6">
         <button
           onClick={handleLogout}
-          className="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg
-            hover:bg-red-500/30 transition-all duration-200 font-medium shadow-lg"
+          className="button-gradient text-white px-6 py-2 rounded-lg hover-glow whitespace-nowrap"
         >
           Logout
         </button>

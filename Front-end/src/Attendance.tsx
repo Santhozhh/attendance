@@ -455,8 +455,7 @@ const Attendance = () => {
         </button>
         <button
           onClick={handleLogout}
-          className="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg
-            hover:bg-red-500/30 transition-all duration-200 font-medium shadow-lg"
+          className="button-gradient text-white px-6 py-2 rounded-lg hover-glow whitespace-nowrap"
         >
           Exit History
         </button>
@@ -747,8 +746,7 @@ const Attendance = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(record._id)}
-                            className="flex-1 sm:flex-none bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg
-                              hover:bg-red-500/30 transition-all duration-200"
+                            className="flex-1 sm:flex-none button-gradient text-white px-4 py-2 rounded-lg hover-glow"
                         >
                           Delete
                         </button>
