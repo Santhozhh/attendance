@@ -60,6 +60,7 @@ const Attendance = () => {
   const [searchName, setSearchName] = useState('');
   const [filteredRecords, setFilteredRecords] = useState<AttendanceRecord[]>([]);
   const [studentSummary, setStudentSummary] = useState<StudentSummary | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [notification, setNotification] = useState<{
     message: string;
     type: 'success' | 'error';
@@ -317,24 +318,22 @@ const Attendance = () => {
               const value = context.raw || 0;
               const dataset = context.dataset.data;
               
-              // For both Internal and External OD, show count without percentage
-              if (label === 'OD (Internal)' || label === 'OD (External)') {
-                return `${label}: ${value} (Not counted)`;
-              }
+              // Get individual counts
+              const [present, absent, leave, odInternal, odExternal, late] = dataset;
               
-              // Calculate total excluding both Internal and External OD
-              const internalODIndex = labels.indexOf('OD (Internal)');
-              const externalODIndex = labels.indexOf('OD (External)');
-              const totalExcludingOD = dataset.reduce(
-                (sum: number, val: number, idx: number) => 
-                  (idx !== internalODIndex && idx !== externalODIndex) ? sum + val : sum, 
-                0
-              );
+              // Calculate total students (excluding OD)
+              const totalStudents = present + absent + leave + late;
               
-              // Calculate percentage
-              let percentage = '0.0';
-              if (totalExcludingOD > 0) {
-                percentage = ((value / totalExcludingOD) * 100).toFixed(1);
+              let percentage;
+              if (label === 'Present') {
+                // Present percentage is calculated against total students
+                percentage = ((present / totalStudents) * 100).toFixed(1);
+              } else if (label === 'OD (Internal)' || label === 'OD (External)') {
+                // OD percentage is calculated as additional percentage
+                percentage = ((value / totalStudents) * 100).toFixed(1);
+              } else {
+                // Absent, Leave, and Late percentages are calculated against total students
+                percentage = ((value / totalStudents) * 100).toFixed(1);
               }
               
               return `${label}: ${value} (${percentage}%)`;
@@ -345,6 +344,20 @@ const Attendance = () => {
     };
 
     return <Pie data={chartData} options={options} />;
+  };
+
+  const handleStatusClick = (status: string, record: AttendanceRecord) => {
+    setSelectedRecord(record);
+    if (selectedStatus === status) {
+      setSelectedStatus(null);
+    } else {
+      setSelectedStatus(status);
+    }
+  };
+
+  const getFilteredStudentsByStatus = (record: AttendanceRecord) => {
+    if (!selectedStatus) return record.studentRecords;
+    return record.studentRecords.filter(student => student.status === selectedStatus);
   };
 
   const renderStudentSummary = (summary: StudentSummary) => (
@@ -411,30 +424,36 @@ const Attendance = () => {
         <div className="bg-gray-900 p-4 rounded-lg overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-gray-700">
-                <th className="py-2 px-4 text-gray-400">Date</th>
-                <th className="py-2 px-4 text-gray-400">Status</th>
+              <tr className="border-b border-gray-700/30">
+                <th className="py-2 px-2 text-gray-400 w-[30%]">Date</th>
+                <th className="py-2 px-2 text-gray-400 w-[70%]">Status</th>
               </tr>
             </thead>
             <tbody>
               {summary.attendanceDates.map((record, index) => (
-                <tr key={index} className="border-b border-gray-800">
-                  <td className="py-2 px-4 text-gray-300">
+                <motion.tr
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="border-b border-gray-800/30"
+                >
+                  <td className="py-2 px-2 text-gray-300 whitespace-nowrap">
                     {new Date(record.date).toLocaleDateString('en-GB')}
                   </td>
-                  <td className="py-2 px-4">
-                    <span className={`px-2 py-1 rounded text-sm ${
-                      record.status === 'Present' ? 'bg-green-500/20 text-green-500' :
-                      record.status === 'Absent' ? 'bg-red-500/20 text-red-500' :
-                      record.status === 'Leave' ? 'bg-yellow-500/20 text-yellow-500' :
-                      record.status === 'OD (Internal)' ? 'bg-purple-500/20 text-purple-500' :
-                      record.status === 'OD (External)' ? 'bg-purple-500/20 text-purple-500' :
-                      'bg-orange-500/20 text-orange-500'
+                  <td className="py-2 px-2">
+                    <span className={`inline-block px-2 py-1 rounded text-sm ${
+                      record.status === 'Present' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                      record.status === 'Absent' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                      record.status === 'Leave' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                      record.status === 'On Duty(INTERNAL)' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
+                      record.status === 'On Duty(EXTERNAL)' ? 'bg-purple-900/20 text-purple-400 border border-purple-900/30' :
+                      'bg-orange-500/20 text-orange-400 border border-orange-500/30'
                     }`}>
                       {record.status}
                     </span>
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
@@ -684,8 +703,8 @@ const Attendance = () => {
                       <table className="w-full text-left">
                         <thead>
                           <tr className="border-b border-gray-700/30">
-                            <th className="py-2 px-4 text-gray-400">Date</th>
-                            <th className="py-2 px-4 text-gray-400">Status</th>
+                            <th className="py-2 px-2 text-gray-400 w-[30%]">Date</th>
+                            <th className="py-2 px-2 text-gray-400 w-[70%]">Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -697,11 +716,11 @@ const Attendance = () => {
                               transition={{ delay: index * 0.05 }}
                               className="border-b border-gray-800/30"
                             >
-                              <td className="py-2 px-4 text-gray-300">
+                              <td className="py-2 px-2 text-gray-300 whitespace-nowrap">
                                 {new Date(record.date).toLocaleDateString('en-GB')}
                               </td>
-                              <td className="py-2 px-4">
-                                <span className={`px-2 py-1 rounded text-sm ${
+                              <td className="py-2 px-2">
+                                <span className={`inline-block px-2 py-1 rounded text-sm ${
                                   record.status === 'Present' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
                                   record.status === 'Absent' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
                                   record.status === 'Leave' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
@@ -738,20 +757,6 @@ const Attendance = () => {
                         <h3 className="text-xl font-medium text-gradient">
                         {new Date(record.date).toLocaleDateString('en-GB')}
                       </h3>
-                      <div className="flex gap-2 w-full sm:w-auto">
-                        <button
-                          onClick={() => setSelectedRecord(record)}
-                            className="flex-1 sm:flex-none button-gradient text-white px-4 py-2 rounded-lg hover-glow"
-                        >
-                          View Details
-                        </button>
-                        <button
-                          onClick={() => handleDelete(record._id)}
-                            className="flex-1 sm:flex-none button-gradient text-white px-4 py-2 rounded-lg hover-glow"
-                        >
-                          Delete
-                        </button>
-                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -772,31 +777,41 @@ const Attendance = () => {
 
                       <div className="grid grid-cols-2 gap-4">
                           {[
-                            { label: 'Present', count: record.presentCount, color: chartColors.present },
-                            { label: 'Absent', count: record.absentCount, color: chartColors.absent },
-                            { label: 'Leave', count: record.leaveCount, color: chartColors.leave },
-                            { label: 'OD (Internal)', count: record.odInternalCount, color: chartColors.odInternal },
-                            { label: 'OD (External)', count: record.odExternalCount, color: chartColors.odExternal },
-                            { label: 'Late', count: record.lateCount, color: chartColors.late }
-                          ].map(({ label, count, color }) => (
-                            <div key={label} className="glass-effect p-4 rounded-lg">
+                            { label: 'Present', count: record.presentCount, color: chartColors.present, status: 'Present' },
+                            { label: 'Absent', count: record.absentCount, color: chartColors.absent, status: 'Absent' },
+                            { label: 'Leave', count: record.leaveCount, color: chartColors.leave, status: 'Leave' },
+                            { label: 'OD (Internal)', count: record.odInternalCount, color: chartColors.odInternal, status: 'On Duty(INTERNAL)' },
+                            { label: 'OD (External)', count: record.odExternalCount, color: chartColors.odExternal, status: 'On Duty(EXTERNAL)' },
+                            { label: 'Late', count: record.lateCount, color: chartColors.late, status: 'Late' }
+                          ].map(({ label, count, color, status }) => (
+                            <button
+                              key={label}
+                              onClick={() => handleStatusClick(status, record)}
+                              className={`glass-effect p-4 rounded-lg transition-all duration-200 hover:ring-2 hover:ring-indigo-500/50 
+                                ${selectedStatus === status && selectedRecord?._id === record._id ? 'ring-2 ring-indigo-500' : ''}`}
+                            >
                               <p className="text-sm text-indigo-300">{label}</p>
                               <p className="text-xl" style={{ color }}>{count}</p>
-                        </div>
+                            </button>
                           ))}
                       </div>
                     </div>
 
-                    {selectedRecord === record && (
+                    {selectedRecord?._id === record._id && (
                         <motion.div
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="mt-6"
                         >
                         <div className="flex justify-between items-center mb-4">
-                            <h4 className="text-lg font-medium text-gradient">Student Details</h4>
+                            <h4 className="text-lg font-medium text-gradient">
+                              {selectedStatus ? `${selectedStatus} Students` : 'All Students'}
+                            </h4>
                           <button
-                            onClick={() => setSelectedRecord(null)}
+                            onClick={() => {
+                              setSelectedRecord(null);
+                              setSelectedStatus(null);
+                            }}
                             className="text-gray-400 hover:text-gray-300"
                           >
                             Close
@@ -806,23 +821,23 @@ const Attendance = () => {
                             <table className="w-full text-left">
                               <thead>
                                 <tr className="border-b border-gray-700/30">
-                                  <th className="py-2 px-4 text-gray-400">Roll No</th>
-                                  <th className="py-2 px-4 text-gray-400">Name</th>
-                                  <th className="py-2 px-4 text-gray-400">Status</th>
+                                  <th className="py-2 px-2 text-gray-400 w-[25%]">Roll No</th>
+                                  <th className="py-2 px-2 text-gray-400 w-[45%]">Name</th>
+                                  <th className="py-2 px-2 text-gray-400 w-[30%]">Status</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                {record.studentRecords.map((student) => (
+                                {getFilteredStudentsByStatus(record).map((student) => (
                                   <motion.tr
                                     key={student.studentId}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     className="border-b border-gray-800/30"
                                   >
-                                    <td className="py-2 px-4 text-gray-300">{student.rollNo}</td>
-                                    <td className="py-2 px-4 text-gray-300">{student.name}</td>
-                                    <td className="py-2 px-4">
-                                      <span className={`px-2 py-1 rounded text-sm ${
+                                    <td className="py-2 px-2 text-gray-300 whitespace-nowrap">{student.rollNo}</td>
+                                    <td className="py-2 px-2 text-gray-300 truncate max-w-[200px]">{student.name}</td>
+                                    <td className="py-2 px-2">
+                                      <span className={`inline-block px-2 py-1 rounded text-sm ${
                                         student.status === 'Present' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
                                         student.status === 'Absent' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
                                         student.status === 'Leave' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :

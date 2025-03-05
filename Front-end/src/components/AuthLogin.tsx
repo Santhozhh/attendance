@@ -11,7 +11,6 @@ const AuthLogin = () => {
   const [error, setError] = useState('');
   const isHistoryLogin = location.pathname === '/login/history' || location.pathname === '/history-login';
 
-  // Check if already authenticated
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     const isHistoryAuthenticated = localStorage.getItem('isHistoryAuthenticated') === 'true';
@@ -27,7 +26,6 @@ const AuthLogin = () => {
     e.preventDefault();
     
     if (isHistoryLogin) {
-      // History login credentials
       if (username === 'VCET' && password === 'VCET@123') {
         localStorage.setItem('isHistoryAuthenticated', 'true');
         navigate('/history');
@@ -35,7 +33,6 @@ const AuthLogin = () => {
         setError('Invalid username or password');
       }
     } else {
-      // Main dashboard login credentials
       if (username === 'admin' && password === 'admin@123') {
         localStorage.setItem('isAuthenticated', 'true');
         navigate('/dashboard');
