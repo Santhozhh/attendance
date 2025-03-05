@@ -337,10 +337,10 @@ const copyToClipboard = () => {
                     <table className="min-w-full divide-y divide-violet-500/20">
                       <thead className="bg-[#2d1b69]">
                         <tr>
-                          <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider w-[40px] sm:w-[60px] sticky left-0 bg-[#2d1b69] z-20">
+                          <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider w-[30px] sm:w-[60px] sticky left-0 bg-[#2d1b69] z-20">
                         S No
                       </th>
-                          <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider w-[25vw] sm:w-[180px] sticky left-[40px] sm:left-[60px] bg-[#2d1b69] z-20">
+                          <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider w-[calc(25vw-30px)] sm:w-[180px] sticky left-[30px] sm:left-[60px] bg-[#2d1b69] z-20">
                         Student Name
                       </th>
                           <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[100px]">
@@ -364,10 +364,10 @@ const copyToClipboard = () => {
                             custom={index}
                             className="hover:bg-[#2d1b69] transition-colors"
                           >
-                            <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-white w-[40px] sm:w-[60px] sticky left-0 bg-[#1a103f] z-10">
+                            <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-white w-[30px] sm:w-[60px] sticky left-0 bg-[#1a103f] z-10">
                               {student.SNo}
                         </td>
-                            <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white w-[25vw] sm:w-[180px] sticky left-[40px] sm:left-[60px] bg-[#1a103f] z-10">
+                            <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white w-[calc(25vw-30px)] sm:w-[180px] sticky left-[30px] sm:left-[60px] bg-[#1a103f] z-10">
                               {student.Name}
                         </td>
                             <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-white min-w-[100px]">
