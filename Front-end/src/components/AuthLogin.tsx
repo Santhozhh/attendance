@@ -88,12 +88,24 @@ const AuthLogin = () => {
               {error && (
                 <p className="text-red-400 text-sm">{error}</p>
               )}
-              <button
-                type="submit"
-                className="w-full button-gradient text-white px-6 py-2 rounded-lg hover-glow"
-              >
-                {isHistoryLogin ? 'View History' : 'Login'}
-              </button>
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  className="flex-1 button-gradient text-white px-6 py-2 rounded-lg hover-glow"
+                >
+                  {isHistoryLogin ? 'View History' : 'Login'}
+                </button>
+                {isHistoryLogin && (
+                  <button
+                    type="button"
+                    onClick={() => navigate('/')}
+                    className="flex-1 bg-[#11111b]/50 text-indigo-300 border border-indigo-500/20 px-6 py-2 rounded-lg 
+                      hover:bg-indigo-500/20 transition-all duration-200"
+                  >
+                    Back to Dashboard
+                  </button>
+                )}
+              </div>
             </form>
           </div>
         </div>
