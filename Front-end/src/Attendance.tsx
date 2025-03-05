@@ -253,8 +253,7 @@ const Attendance = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    navigate('/login');
+    navigate('/');
   };
 
   const handleDelete = async (recordId: string) => {
@@ -445,6 +444,24 @@ const Attendance = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#0f0f1a] bg-mesh p-4 sm:p-6">
+      {/* Header with navigation buttons */}
+      <div className="flex justify-end items-center gap-4 mb-6">
+        <button
+          onClick={() => navigate('/')}
+          className="bg-[#11111b]/50 text-indigo-300 border border-indigo-500/20 px-4 py-2 rounded-lg 
+            hover:bg-indigo-500/20 transition-all duration-200"
+        >
+          Back to Dashboard
+        </button>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg
+            hover:bg-red-500/30 transition-all duration-200 font-medium shadow-lg"
+        >
+          Exit History
+        </button>
+      </div>
+
       {/* Delete Confirmation Modal */}
       <AnimatePresence>
       {deleteConfirmation.isOpen && (
@@ -534,21 +551,6 @@ const Attendance = () => {
           <h1 className="text-3xl sm:text-4xl font-bold text-center sm:text-left">
             <span className="text-white">Attendance History</span>
           </h1>
-          <div className="flex gap-2 w-full sm:w-auto">
-            <button
-              onClick={handleLogout}
-              className="flex-1 sm:flex-none button-gradient text-white px-4 py-2 rounded-lg hover-glow"
-            >
-              Logout
-            </button>
-            <button
-              onClick={() => navigate('/')}
-              className="flex-1 sm:flex-none bg-[#11111b]/50 text-indigo-300 border border-indigo-500/20 px-4 py-2 rounded-lg 
-                hover:bg-indigo-500/20 transition-all duration-200"
-            >
-              Back to Dashboard
-            </button>
-          </div>
         </motion.div>
 
         <div className="mb-6 space-y-4">

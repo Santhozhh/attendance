@@ -1,27 +1,29 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { ReactElement } from 'react';
 
 interface ProtectedRouteProps {
-  children: React.ReactNode;
+  children: ReactElement;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
   const location = useLocation();
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const isHistoryAuthenticated = localStorage.getItem('isHistoryAuthenticated') === 'true';
+  const isHistoryPage = location.pathname === '/history';
 
-  useEffect(() => {
-    // If not authenticated and trying to access a protected route, store the attempted path
-    if (!isAuthenticated) {
-      sessionStorage.setItem('redirectPath', location.pathname);
+  if (isHistoryPage) {
+    // For history page, require history authentication
+    if (!isHistoryAuthenticated) {
+      return <Navigate to="/login/history" replace state={{ from: location }} />;
     }
-  }, [isAuthenticated, location]);
-
-  if (!isAuthenticated) {
-    // Redirect to login with the current location stored in state
-    return <Navigate to="/login" replace state={{ from: location }} />;
+  } else {
+    // For other protected pages, require main authentication
+    if (!isAuthenticated) {
+      return <Navigate to="/login" replace state={{ from: location }} />;
+    }
   }
 
-  return <>{children}</>;
+  return children;
 };
 
 export default ProtectedRoute; 
