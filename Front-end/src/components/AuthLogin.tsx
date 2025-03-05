@@ -9,7 +9,7 @@ const AuthLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const isHistoryLogin = location.pathname === '/login/history';
+  const isHistoryLogin = location.pathname === '/login/history' || location.pathname === '/history-login';
 
   // Check if already authenticated
   useEffect(() => {
@@ -45,28 +45,8 @@ const AuthLogin = () => {
     }
   };
 
-  const handleBackToDashboard = () => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-    if (isAuthenticated) {
-      navigate('/dashboard');
-    } else {
-      navigate('/login');
-    }
-  };
-
   return (
-    <div className="min-h-screen w-full bg-[#020617] bg-mesh flex items-center justify-center p-4">
-      {isHistoryLogin && (
-        <div className="fixed top-4 right-4">
-          <button
-            onClick={handleBackToDashboard}
-            className="bg-[#11111b]/50 text-indigo-300 border border-indigo-500/20 px-4 py-2 rounded-lg 
-              hover:bg-indigo-500/20 transition-all duration-200"
-          >
-            Back to Dashboard
-          </button>
-        </div>
-      )}
+    <div className="min-h-screen w-full bg-[#0f0f1a] bg-mesh flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -75,7 +55,7 @@ const AuthLogin = () => {
         <div className="gradient-border">
           <div className="glass-effect p-8 rounded-xl relative">
             <div className="spotlight"></div>
-            <h2 className="text-3xl font-bold mb-6 text-gradient text-center">
+            <h2 className="text-2xl font-bold text-center text-gradient mb-8">
               {isHistoryLogin ? 'View Attendance History' : 'Login'}
             </h2>
             <form onSubmit={handleLogin} className="space-y-6">
@@ -88,8 +68,7 @@ const AuthLogin = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full bg-[#11111b]/50 text-white border border-indigo-500/20 rounded-lg px-4 py-2
-                    focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all
-                    placeholder-indigo-300/50"
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
                   placeholder="Enter username"
                 />
               </div>
@@ -102,23 +81,16 @@ const AuthLogin = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-[#11111b]/50 text-white border border-indigo-500/20 rounded-lg px-4 py-2
-                    focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all
-                    placeholder-indigo-300/50"
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
                   placeholder="Enter password"
                 />
               </div>
               {error && (
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-red-400 text-sm"
-                >
-                  {error}
-                </motion.p>
+                <p className="text-red-400 text-sm">{error}</p>
               )}
               <button
                 type="submit"
-                className="w-full button-gradient text-white px-6 py-3 rounded-lg font-medium hover-glow"
+                className="w-full button-gradient text-white px-6 py-2 rounded-lg hover-glow"
               >
                 {isHistoryLogin ? 'View History' : 'Login'}
               </button>

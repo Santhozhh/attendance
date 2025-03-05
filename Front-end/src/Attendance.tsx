@@ -253,7 +253,8 @@ const Attendance = () => {
   };
 
   const handleLogout = () => {
-    navigate('/');
+    localStorage.removeItem('isHistoryAuthenticated');
+    navigate('/login/history');
   };
 
   const handleDelete = async (recordId: string) => {
