@@ -381,7 +381,7 @@ const Attendance = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">Present</p>
-            <p className="text-xl text-green-500">{summary.presentCount}</p>
+            <p className="text-xl text-green-200">{summary.presentCount}</p>
           </div>
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">Absent</p>

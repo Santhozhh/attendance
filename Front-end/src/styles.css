@@ -94,56 +94,56 @@
 
 /* Status colors */
 .status-present {
-  background: #047857;
+  background: #4ade80;
   color: white;
-  border: 1px solid rgba(52, 211, 153, 0.4);
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
 }
 
 .status-absent {
-  background: #b91c1c;
+  background: #ff8080;
   color: white;
-  border: 1px solid rgba(248, 113, 113, 0.4);
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(255, 128, 128, 0.4);
+  box-shadow: 0 0 15px rgba(255, 128, 128, 0.3);
 }
 
 .status-leave {
-  background: #b45309;
+  background: #fcd34d;
   color: white;
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(252, 211, 77, 0.4);
+  box-shadow: 0 0 15px rgba(252, 211, 77, 0.3);
 }
 
 .status-od {
-  background: #6d28d9;
+  background: #a78bfa;
   color: white;
   border: 1px solid rgba(167, 139, 250, 0.4);
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
 }
 
 .status-od-external {
-  background: #5b21b6;
+  background: #c084fc;
   color: white;
-  border: 1px solid rgba(147, 51, 234, 0.4);
-  box-shadow: 0 0 15px rgba(126, 34, 206, 0.3);
+  border: 1px solid rgba(192, 132, 252, 0.4);
+  box-shadow: 0 0 15px rgba(192, 132, 252, 0.3);
 }
 
 .status-late {
-  background: #c2410c;
+  background: #fdba74;
   color: white;
-  border: 1px solid rgba(251, 146, 60, 0.4);
-  box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+  border: 1px solid rgba(253, 186, 116, 0.4);
+  box-shadow: 0 0 15px rgba(253, 186, 116, 0.3);
 }
 
 /* Unselected button state */
 .attendance-button-unselected {
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(51, 65, 85, 0.3);
   color: rgba(226, 232, 240, 0.9);
   border: 1px solid rgba(71, 85, 105, 0.4);
 }
 
 .attendance-button-unselected:hover {
-  background: rgba(30, 41, 59, 0.7);
+  background: rgba(51, 65, 85, 0.5);
   border: 1px solid rgba(71, 85, 105, 0.6);
   box-shadow: 0 0 15px rgba(71, 85, 105, 0.3);
 }
