@@ -258,38 +258,6 @@ const Attendance = () => {
     navigate('/login/history');
   };
 
-  const handleDelete = async (recordId: string) => {
-    setDeleteConfirmation({ isOpen: true, recordId });
-  };
-
-  const confirmDelete = async () => {
-    if (!deleteConfirmation.recordId) return;
-
-    try {
-      const response = await fetch(`${API_URL}/api/${deleteConfirmation.recordId}`, {
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete attendance record');
-      }
-
-      setRecords(prevRecords => prevRecords.filter(record => record._id !== deleteConfirmation.recordId));
-      setFilteredRecords(prevRecords => prevRecords.filter(record => record._id !== deleteConfirmation.recordId));
-      setSelectedRecord(null);
-      showNotification('Record deleted successfully!', 'success');
-    } catch (error) {
-      console.error('Delete error:', error);
-      showNotification('Failed to delete record. Please try again.', 'error');
-    } finally {
-      setDeleteConfirmation({ isOpen: false, recordId: null });
-    }
-  };
-
   // Render pie chart
   const renderPieChart = (data: number[], labels: string[], colors: string[]) => {
     const chartData = {
@@ -462,65 +430,56 @@ const Attendance = () => {
     </div>
   );
 
+  const handleDelete = async (recordId: string) => {
+    setDeleteConfirmation({ isOpen: true, recordId });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteConfirmation.recordId) return;
+
+    try {
+      const response = await fetch(`${API_URL}/api/${deleteConfirmation.recordId}`, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete attendance record');
+      }
+
+      setRecords(prevRecords => prevRecords.filter(record => record._id !== deleteConfirmation.recordId));
+      setFilteredRecords(prevRecords => prevRecords.filter(record => record._id !== deleteConfirmation.recordId));
+      setSelectedRecord(null);
+      showNotification('Record deleted successfully!', 'success');
+    } catch (error) {
+      console.error('Delete error:', error);
+      showNotification('Failed to delete record. Please try again.', 'error');
+    } finally {
+      setDeleteConfirmation({ isOpen: false, recordId: null });
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#0f0f1a] bg-mesh p-4 sm:p-6">
       {/* Header with navigation buttons */}
       <div className="flex justify-end items-center gap-4 mb-6">
-        <button
+              <button
           onClick={() => navigate('/')}
           className="bg-[#11111b]/50 text-indigo-300 border border-indigo-500/20 px-4 py-2 rounded-lg 
             hover:bg-indigo-500/20 transition-all duration-200"
-        >
+              >
           Back to Dashboard
-        </button>
-        <button
+              </button>
+              <button
           onClick={handleLogout}
           className="button-gradient text-white px-6 py-2 rounded-lg hover-glow whitespace-nowrap"
-        >
+              >
           Exit History
-        </button>
-      </div>
-
-      {/* Delete Confirmation Modal */}
-      <AnimatePresence>
-      {deleteConfirmation.isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
-          >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-              className="w-full max-w-md mx-4"
-            >
-              <div className="gradient-border">
-                <div className="glass-effect p-6 rounded-xl relative">
-                  <div className="spotlight"></div>
-                  <h3 className="text-xl font-medium text-gradient mb-4">Delete Attendance Record</h3>
-                  <p className="text-gray-300 mb-6">Are you sure you want to delete this attendance record? This action cannot be undone.</p>
-            <div className="flex gap-4">
-              <button
-                onClick={() => setDeleteConfirmation({ isOpen: false, recordId: null })}
-                      className="flex-1 bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 px-4 py-2 rounded-lg transition-all duration-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                      className="flex-1 button-gradient text-white px-4 py-2 rounded-lg hover-glow"
-              >
-                Delete
               </button>
             </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-      )}
-      </AnimatePresence>
 
       {/* Notification Toast */}
       <AnimatePresence>
@@ -557,6 +516,47 @@ const Attendance = () => {
             )}
             <span>{notification.message}</span>
           </div>
+        </motion.div>
+      )}
+      </AnimatePresence>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+      {deleteConfirmation.isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="w-full max-w-md mx-4"
+          >
+            <div className="gradient-border">
+              <div className="glass-effect p-6 rounded-xl relative">
+                <div className="spotlight"></div>
+                <h3 className="text-xl font-medium text-gradient mb-4">Delete Attendance Record</h3>
+                <p className="text-gray-300 mb-6">Are you sure you want to delete this attendance record? This action cannot be undone.</p>
+          <div className="flex gap-4">
+            <button
+                    onClick={() => setDeleteConfirmation({ isOpen: false, recordId: null })}
+                    className="flex-1 bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 px-4 py-2 rounded-lg transition-all duration-200"
+            >
+                    Cancel
+            </button>
+            <button
+                    onClick={confirmDelete}
+                    className="flex-1 button-gradient text-white px-4 py-2 rounded-lg hover-glow"
+            >
+                    Delete
+            </button>
+          </div>
+        </div>
+            </div>
+          </motion.div>
         </motion.div>
       )}
       </AnimatePresence>
@@ -757,6 +757,12 @@ const Attendance = () => {
                         <h3 className="text-xl font-medium text-gradient">
                         {new Date(record.date).toLocaleDateString('en-GB')}
                       </h3>
+                        <button
+                          onClick={() => handleDelete(record._id)}
+                        className="button-gradient text-white px-4 py-2 rounded-lg hover-glow"
+                        >
+                          Delete
+                        </button>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
