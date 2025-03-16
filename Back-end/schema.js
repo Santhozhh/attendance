@@ -22,12 +22,7 @@ const attendanceCountSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
-  odInternalCount: {
-    type: Number,
-    required: true,
-    default: 0
-  },
-  odExternalCount: {
+  odCount: {
     type: Number,
     required: true,
     default: 0

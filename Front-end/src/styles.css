@@ -121,13 +121,6 @@
   box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
 }
 
-.status-od-external {
-  background: #c084fc;
-  color: white;
-  border: 1px solid rgba(192, 132, 252, 0.4);
-  box-shadow: 0 0 15px rgba(192, 132, 252, 0.3);
-}
-
 .status-late {
   background: #fdba74;
   color: white;

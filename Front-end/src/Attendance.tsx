@@ -15,8 +15,7 @@ interface AttendanceRecord {
   presentCount: number;
   absentCount: number;
   leaveCount: number;
-  odInternalCount: number;
-  odExternalCount: number;
+  odCount: number;
   lateCount: number;
   totalStudents: number;
   attendanceData: string;
@@ -35,14 +34,12 @@ interface StudentSummary {
   presentCount: number;
   absentCount: number;
   leaveCount: number;
-  odInternalCount: number;
-  odExternalCount: number;
+  odCount: number;
   lateCount: number;
   totalDays: number;
   presentPercentage: string;
   absentPercentage: string;
   leavePercentage: string;
-  odExternalPercentage: string;
   latePercentage: string;
   attendanceDates: {
     date: string;
@@ -78,8 +75,7 @@ const Attendance = () => {
     present: '#818cf8', // Indigo
     absent: '#ec4899',  // Pink
     leave: '#a78bfa',   // Purple
-    odInternal: '#60a5fa', // Blue
-    odExternal: '#3b82f6', // Darker Blue
+    od: '#60a5fa',      // Blue
     late: '#f472b6'     // Pink
   };
 
@@ -127,14 +123,12 @@ const Attendance = () => {
           presentCount: 0,
           absentCount: 0,
           leaveCount: 0,
-          odInternalCount: 0,
-          odExternalCount: 0,
+          odCount: 0,
           lateCount: 0,
           totalDays: filtered.length,
           presentPercentage: '0.0',
           absentPercentage: '0.0',
           leavePercentage: '0.0',
-          odExternalPercentage: '0.0',
           latePercentage: '0.0',
           attendanceDates: []
         };
@@ -155,12 +149,8 @@ const Attendance = () => {
               case 'Leave':
                 summary.leaveCount++;
                 break;
-              case 'On Duty(INTERNAL)':
-                summary.odInternalCount++;
-                summary.totalDays--; // Not counting this in total attendance
-                break;
-              case 'On Duty(EXTERNAL)':
-                summary.odExternalCount++;
+              case 'On Duty':
+                summary.odCount++;
                 summary.totalDays--; // Not counting this in total attendance
                 break;
               case 'Late':
@@ -189,7 +179,6 @@ const Attendance = () => {
           leavePercentage: totalDaysExcludingOD > 0 
             ? ((summary.leaveCount / totalDaysExcludingOD) * 100).toFixed(1) 
             : '0.0',
-          odExternalPercentage: '0.0', // Set to 0 since it's not counted
           latePercentage: totalDaysExcludingOD > 0 
             ? ((summary.lateCount / totalDaysExcludingOD) * 100).toFixed(1) 
             : '0.0'
@@ -287,16 +276,16 @@ const Attendance = () => {
               const dataset = context.dataset.data;
               
               // Get individual counts
-              const [present, absent, leave, odInternal, odExternal, late] = dataset;
+              const [presentCount, absentCount, leaveCount, odCount, lateCount] = dataset;
               
               // Calculate total students (excluding OD)
-              const totalStudents = present + absent + leave + late;
+              const totalStudents = presentCount + absentCount + leaveCount + lateCount;
               
               let percentage;
               if (label === 'Present') {
                 // Present percentage is calculated against total students
-                percentage = ((present / totalStudents) * 100).toFixed(1);
-              } else if (label === 'OD (Internal)' || label === 'OD (External)') {
+                percentage = ((presentCount / totalStudents) * 100).toFixed(1);
+              } else if (label === 'OD') {
                 // OD percentage is calculated as additional percentage
                 percentage = ((value / totalStudents) * 100).toFixed(1);
               } else {
@@ -338,7 +327,7 @@ const Attendance = () => {
             Total Days (Excluding Internal OD): {summary.totalDays}
           </p>
           <p className="text-gray-400 mt-1">
-            Internal OD Days: {summary.odInternalCount}
+            Internal OD Days: {summary.odCount}
           </p>
         </div>
       </div>
@@ -350,12 +339,11 @@ const Attendance = () => {
               summary.presentCount,
               summary.absentCount,
               summary.leaveCount,
-              summary.odInternalCount,
-              summary.odExternalCount,
+              summary.odCount,
               summary.lateCount,
             ],
-            ['Present', 'Absent', 'Leave', 'OD (Internal)', 'OD (External)', 'Late'],
-            ['#22c55e', '#ef4444', '#eab308', '#a855f7', '#7e22ce', '#f97316']
+            ['Present', 'Absent', 'Leave', 'On Duty', 'Late'],
+            ['#22c55e', '#ef4444', '#eab308', '#a855f7', '#f97316']
           )}
         </div>
 
@@ -373,12 +361,8 @@ const Attendance = () => {
             <p className="text-xl text-yellow-500">{summary.leaveCount}</p>
           </div>
           <div className="bg-gray-900 p-4 rounded-lg">
-            <p className="text-sm text-gray-400">OD (Internal)</p>
-            <p className="text-xl text-purple-500">{summary.odInternalCount}</p>
-          </div>
-          <div className="bg-gray-900 p-4 rounded-lg">
-            <p className="text-sm text-gray-400">OD (External)</p>
-            <p className="text-xl text-purple-500">{summary.odExternalCount}</p>
+            <p className="text-sm text-gray-400">On Duty</p>
+            <p className="text-xl text-purple-500">{summary.odCount}</p>
           </div>
           <div className="bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-400">Late</p>
@@ -414,8 +398,7 @@ const Attendance = () => {
                       record.status === 'Present' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
                       record.status === 'Absent' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
                       record.status === 'Leave' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                      record.status === 'On Duty(INTERNAL)' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
-                      record.status === 'On Duty(EXTERNAL)' ? 'bg-purple-900/20 text-purple-400 border border-purple-900/30' :
+                      record.status === 'On Duty' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
                       'bg-orange-500/20 text-orange-400 border border-orange-500/30'
                     }`}>
                       {record.status}
@@ -671,12 +654,11 @@ const Attendance = () => {
                           studentSummary.presentCount,
                           studentSummary.absentCount,
                           studentSummary.leaveCount,
-                          studentSummary.odInternalCount,
-                          studentSummary.odExternalCount,
+                          studentSummary.odCount,
                           studentSummary.lateCount,
                         ],
-                        ['Present', 'Absent', 'Leave', 'OD (Internal)', 'OD (External)', 'Late'],
-                        ['#22c55e', '#ef4444', '#eab308', '#a855f7', '#7e22ce', '#f97316']
+                        ['Present', 'Absent', 'Leave', 'On Duty', 'Late'],
+                        ['#22c55e', '#ef4444', '#eab308', '#a855f7', '#f97316']
                       )}
                     </div>
 
@@ -685,8 +667,7 @@ const Attendance = () => {
                         { label: 'Present', count: studentSummary.presentCount, color: chartColors.present },
                         { label: 'Absent', count: studentSummary.absentCount, color: chartColors.absent },
                         { label: 'Leave', count: studentSummary.leaveCount, color: chartColors.leave },
-                        { label: 'OD (Internal)', count: studentSummary.odInternalCount, color: chartColors.odInternal },
-                        { label: 'OD (External)', count: studentSummary.odExternalCount, color: chartColors.odExternal },
+                        { label: 'On Duty', count: studentSummary.odCount, color: chartColors.od },
                         { label: 'Late', count: studentSummary.lateCount, color: chartColors.late }
                       ].map(({ label, count, color }) => (
                         <div key={label} className="glass-effect p-4 rounded-lg">
@@ -724,8 +705,7 @@ const Attendance = () => {
                                   record.status === 'Present' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
                                   record.status === 'Absent' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
                                   record.status === 'Leave' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                                  record.status === 'On Duty(INTERNAL)' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
-                                  record.status === 'On Duty(EXTERNAL)' ? 'bg-purple-900/20 text-purple-400 border border-purple-900/30' :
+                                  record.status === 'On Duty' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
                                   'bg-orange-500/20 text-orange-400 border border-orange-500/30'
                                 }`}>
                                   {record.status}
@@ -772,12 +752,11 @@ const Attendance = () => {
                             record.presentCount,
                             record.absentCount,
                             record.leaveCount,
-                            record.odInternalCount,
-                            record.odExternalCount,
+                            record.odCount,
                             record.lateCount,
                           ],
-                          ['Present', 'Absent', 'Leave', 'OD (Internal)', 'OD (External)', 'Late'],
-                          ['#22c55e', '#ef4444', '#eab308', '#a855f7', '#7e22ce', '#f97316']
+                          ['Present', 'Absent', 'Leave', 'On Duty', 'Late'],
+                          ['#22c55e', '#ef4444', '#eab308', '#a855f7', '#f97316']
                         )}
                       </div>
 
@@ -786,8 +765,7 @@ const Attendance = () => {
                             { label: 'Present', count: record.presentCount, color: chartColors.present, status: 'Present' },
                             { label: 'Absent', count: record.absentCount, color: chartColors.absent, status: 'Absent' },
                             { label: 'Leave', count: record.leaveCount, color: chartColors.leave, status: 'Leave' },
-                            { label: 'OD (Internal)', count: record.odInternalCount, color: chartColors.odInternal, status: 'On Duty(INTERNAL)' },
-                            { label: 'OD (External)', count: record.odExternalCount, color: chartColors.odExternal, status: 'On Duty(EXTERNAL)' },
+                            { label: 'On Duty', count: record.odCount, color: chartColors.od, status: 'On Duty' },
                             { label: 'Late', count: record.lateCount, color: chartColors.late, status: 'Late' }
                           ].map(({ label, count, color, status }) => (
                             <button
@@ -847,8 +825,7 @@ const Attendance = () => {
                                         student.status === 'Present' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
                                         student.status === 'Absent' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
                                         student.status === 'Leave' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                                        student.status === 'On Duty(INTERNAL)' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
-                                        student.status === 'On Duty(EXTERNAL)' ? 'bg-purple-900/20 text-purple-400 border border-purple-900/30' :
+                                        student.status === 'On Duty' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
                                         'bg-orange-500/20 text-orange-400 border border-orange-500/30'
                                       }`}>
                                         {student.status}

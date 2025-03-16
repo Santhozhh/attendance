@@ -76,8 +76,7 @@ const Dashboard = () => {
       'Present': 'emerald',
       'Absent': 'rose',
       'Leave': 'amber',
-      'On Duty(INTERNAL)': 'violet',
-      'On Duty(EXTERNAL)': 'purple',
+      'On Duty': 'violet',
       'Late': 'orange'
     };
     
@@ -85,8 +84,7 @@ const Dashboard = () => {
       'Present': 'is now marked Present',
       'Absent': 'is marked Absent',
       'Leave': 'is on Leave',
-      'On Duty(INTERNAL)': 'is on Internal OD',
-      'On Duty(EXTERNAL)': 'is on External OD',
+      'On Duty': 'is on On Duty',
       'Late': 'is marked Late'
     };
     
@@ -96,11 +94,10 @@ const Dashboard = () => {
 
   const totalStudents = students.length;
   const presentCount = Object.values(attendance).filter(
-    (a) => a === "Present" || a === "Late" || a === "On Duty(INTERNAL)" || a === "On Duty(EXTERNAL)"
+    (a) => a === "Present" || a === "Late" || a== "On Duty"
   ).length;
   const leaveCount = Object.values(attendance).filter((a) => a === "Leave").length;
-  const odCountINTERNAL = Object.values(attendance).filter((a) => a === "On Duty(INTERNAL)").length;
-  const odCountEXTERNAL = Object.values(attendance).filter((a) => a === "On Duty(EXTERNAL)").length;
+  const odCount = Object.values(attendance).filter((a) => a === "On Duty").length;
   const lateCount = Object.values(attendance).filter((a) => a === "Late").length;
   const absentCount = Object.values(attendance).filter((a) => a === "Absent").length;
 
@@ -114,20 +111,15 @@ const Dashboard = () => {
 DATE : ${date}
 PRESENT: ${presentCount}/${totalStudents}
 LEAVE: ${leaveCount}
-ON DUTY (INTERNAL): ${odCountINTERNAL}
-ON DUTY (EXTERNAL) : ${odCountEXTERNAL}
-TOTAL ON DUTY : ${odCountEXTERNAL+odCountINTERNAL}
+ON DUTY: ${odCount}
 LATE: ${lateCount}
 ABSENT: ${absentCount}
 
 LEAVE
 ${getList("Leave")}
 
-ON DUTY(INTERNAL)
-${getList("On Duty(INTERNAL)")}
-
-ON DUTY(EXTERNAL)
-${getList("On Duty(EXTERNAL)")}
+ON DUTY
+${getList("On Duty")}
 
 LATE
 ${getList("Late")}
@@ -155,8 +147,7 @@ Have a Very Nice Day`;
         presentCount,
         absentCount,
         leaveCount,
-        odInternalCount: odCountINTERNAL,
-        odExternalCount: odCountEXTERNAL,
+        odCount,
         lateCount,
         totalStudents,
         attendanceData: attendanceSummary,
@@ -361,7 +352,7 @@ Have a Very Nice Day`;
                       <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[120px]">
                         Reg No
                       </th>
-                      {["Present", "Absent", "Leave", "On Duty(INTERNAL)", "On Duty(EXTERNAL)", "Late"].map((header) => (
+                      {["Present", "Absent", "Leave", "On Duty", "Late"].map((header) => (
                         <th key={header} className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[120px]">
                           {header}
                         </th>
@@ -388,7 +379,7 @@ Have a Very Nice Day`;
                         <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-white min-w-[120px]">
                           {student.RegNo}
                         </td>
-                        {["Present", "Absent", "Leave", "On Duty(INTERNAL)", "On Duty(EXTERNAL)", "Late"].map((status) => (
+                        {["Present", "Absent", "Leave", "On Duty", "Late"].map((status) => (
                           <td key={status} className="px-2 sm:px-6 py-4 whitespace-nowrap min-w-[120px]">
                             <motion.button
                               whileHover={{ scale: 1.05 }}
@@ -399,8 +390,7 @@ Have a Very Nice Day`;
                                   ? status === "Present" ? "status-present" :
                                     status === "Absent" ? "status-absent" :
                                     status === "Leave" ? "status-leave" :
-                                    status === "On Duty(INTERNAL)" ? "status-od" :
-                                    status === "On Duty(EXTERNAL)" ? "status-od-external" :
+                                    status === "On Duty" ? "status-od" :
                                     "status-late"
                                   : "attendance-button-unselected"
                               }`}

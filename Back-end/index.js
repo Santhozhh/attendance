@@ -30,8 +30,7 @@ app.post('/api/', async (req, res) => {
       presentCount,
       absentCount,
       leaveCount,
-      odInternalCount,
-      odExternalCount,
+      odCount,
       lateCount,
       totalStudents,
       attendanceData,
@@ -43,8 +42,7 @@ app.post('/api/', async (req, res) => {
       presentCount,
       absentCount,
       leaveCount,
-      odInternalCount,
-      odExternalCount,
+      odCount,
       lateCount,
       totalStudents,
       attendanceData,
@@ -105,15 +103,13 @@ app.get('/api/student', async (req, res) => {
       presentDays: 0,
       absentDays: 0,
       leaveDays: 0,
-      odInternalDays: 0,
-      odExternalDays: 0,
+      odDays: 0,
       lateDays: 0,
       dates: {
         present: [],
         absent: [],
         leave: [],
-        odInternal: [],
-        odExternal: [],
+        od: [],
         late: []
       }
     };
@@ -139,13 +135,9 @@ app.get('/api/student', async (req, res) => {
             studentStats.leaveDays++;
             studentStats.dates.leave.push(date);
             break;
-          case 'On Duty(INTERNAL)':
-            studentStats.odInternalDays++;
-            studentStats.dates.odInternal.push(date);
-            break;
-          case 'On Duty(EXTERNAL)':
-            studentStats.odExternalDays++;
-            studentStats.dates.odExternal.push(date);
+          case 'On Duty':
+            studentStats.odDays++;
+            studentStats.dates.od.push(date);
             break;
           case 'Late':
             studentStats.lateDays++;
@@ -201,8 +193,7 @@ app.get('/api/stats/summary', async (req, res) => {
           avgPresent: { $avg: '$presentCount' },
           avgAbsent: { $avg: '$absentCount' },
           avgLeave: { $avg: '$leaveCount' },
-          avgODInternal: { $avg: '$odInternalCount' },
-          avgODExternal: { $avg: '$odExternalCount' },
+          avgOD: { $avg: '$odCount' },
           totalDays: { $sum: 1 }
         }
       }
