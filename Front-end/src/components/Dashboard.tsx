@@ -528,6 +528,30 @@ Have a Very Nice Day`;
         >
           <p className="text-xl font-bold text-gradient">
             Developed By SANTHOSH
+            <a 
+              href="mailto:ksdsanthosh130@gmail.com" 
+              className="ml-2 inline-flex items-center align-middle"
+              title="Email me"
+            >
+              <div className="relative inline-block w-6 h-6">
+                <div className="absolute inset-0 bg-purple-500/30 rounded-md blur-md"></div>
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="20" 
+                  height="20" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="white" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  className="relative z-10 drop-shadow-glow"
+                >
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </div>
+            </a>
           </p>
         </motion.div>
       </motion.div>
