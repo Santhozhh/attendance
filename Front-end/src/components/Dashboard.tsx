@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import "../styles/starry-background.css";
 
 interface Student {
   SNo: string;
@@ -229,9 +230,13 @@ Have a Very Nice Day`;
 
   return (
     <div 
-      className="min-h-screen w-full bg-[#020617] bg-mesh p-6 relative overflow-hidden"
+      className="min-h-screen w-full bg-[#020208] bg-mesh p-6 relative overflow-hidden starry-background"
       onMouseMove={handleMouseMove}
     >
+      <div className="stars"></div>
+      <div className="stars2"></div>
+      <div className="stars3"></div>
+      <div className="stars4"></div>
       {/* Header with navigation buttons */}
       <div className="flex justify-end items-center gap-4 mb-6">
         <button
@@ -290,60 +295,58 @@ Have a Very Nice Day`;
           variants={itemVariants}
           className="mb-6"
         >
-          <div className="gradient-border">
-            <div className="glass-effect p-4 rounded-xl relative">
-              <div className="spotlight"></div>
+          <div className="glass-effect p-4 rounded-xl relative bg-[#0a0b1a]">
+            <div className="spotlight"></div>
+            <div className="relative">
               <div className="relative">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Search by name or roll number..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2 bg-[#0f172a] text-white border border-indigo-500/40 rounded-lg 
-                      placeholder-indigo-300/50 focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-all"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-indigo-400 hover:text-white"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  )}
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
                 </div>
+                <input
+                  type="text"
+                  placeholder="Search by name or roll number..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-10 py-2 bg-[#0a0b1a] text-white rounded-lg 
+                    placeholder-indigo-300/50 focus:outline-none focus:ring-1 focus:ring-[#1a1b3a] transition-all"
+                />
                 {searchQuery && (
-                  <div className="mt-2 text-sm text-white/70 bg-[#1f1f2e] px-3 py-1 rounded-md inline-block">
-                    Found: {filteredStudents.length} student{filteredStudents.length !== 1 ? 's' : ''}
-                  </div>
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-white/70 hover:text-white"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 )}
               </div>
+              {searchQuery && (
+                <div className="mt-2 text-sm text-white/70 bg-[#0a0b1a] px-3 py-1 rounded-md inline-block">
+                  Found: {filteredStudents.length} student{filteredStudents.length !== 1 ? 's' : ''}
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
 
         <motion.div
           variants={itemVariants}
-          className="gradient-border"
+          className="rounded-xl overflow-hidden"
         >
-          <div className="glass-effect rounded-xl overflow-hidden relative">
+          <div className="glass-effect rounded-xl overflow-hidden relative bg-[#0a0b1a]">
             <div className="spotlight"></div>
             <div className="relative">
               <div className="overflow-x-auto max-h-[70vh]">
-                <table className="min-w-full divide-y divide-violet-500/20">
-                  <thead className="bg-[#2d1b69]">
-                    <tr>
-                      <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider w-[30px] sm:w-[60px] sticky left-0 bg-[#2d1b69] z-20">
+                <table className="min-w-full divide-y divide-[#1a1b3a]">
+                  <thead className="bg-[#0a0b1a] backdrop-blur-sm sticky top-0 z-50">
+                    <tr className="border-b border-[#1a1b3a]">
+                      <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider w-[30px] sm:w-[60px] sticky left-0 bg-[#0a0b1a] backdrop-blur-sm z-20">
                         S No
                       </th>
-                      <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider w-[calc(25vw-30px)] sm:w-[180px] sticky left-[30px] sm:left-[60px] bg-[#2d1b69] z-20">
+                      <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider w-[calc(25vw-30px)] sm:w-[180px] sticky left-[30px] sm:left-[60px] bg-[#0a0b1a] backdrop-blur-sm z-20">
                         Student Name
                       </th>
                       <th className="px-2 sm:px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider min-w-[100px]">
@@ -359,18 +362,18 @@ Have a Very Nice Day`;
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-violet-500/20 bg-[#1a103f]">
+                  <tbody className="divide-y divide-[#1a1b3a] bg-[#0a0b1a] backdrop-blur-md">
                     {filteredStudents.map((student: any, index) => (
                       <motion.tr
                         key={student.SNo}
                         variants={tableRowVariants}
                         custom={index}
-                        className="hover:bg-[#2d1b69] transition-colors"
+                        className="hover:bg-[#0f1225] transition-colors backdrop-blur-sm"
                       >
-                        <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-white w-[30px] sm:w-[60px] sticky left-0 bg-[#1a103f] z-10">
+                        <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-white w-[30px] sm:w-[60px] sticky left-0 bg-[#0a0b1a]/95 backdrop-blur-md z-10">
                           {student.SNo}
                         </td>
-                        <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white w-[calc(25vw-30px)] sm:w-[180px] sticky left-[30px] sm:left-[60px] bg-[#1a103f] z-10">
+                        <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-white w-[calc(25vw-30px)] sm:w-[180px] sticky left-[30px] sm:left-[60px] bg-[#0a0b1a]/95 backdrop-blur-md z-10">
                           {student.Name}
                         </td>
                         <td className="px-2 sm:px-6 py-4 whitespace-nowrap text-sm text-white min-w-[100px]">
@@ -412,36 +415,33 @@ Have a Very Nice Day`;
           variants={itemVariants}
           className="mt-8"
         >
-          <div className="gradient-border">
-            <div className="glass-effect p-6 rounded-xl relative">
-              <div className="spotlight"></div>
-              <h2 className="text-2xl font-bold mb-4 text-white">
-                Attendance Summary
-              </h2>
-              <pre className="bg-[#0f172a]/50 p-4 rounded-lg font-mono text-sm text-white/90 overflow-x-auto border border-violet-500/20">
-                {attendanceSummary}
-              </pre>
+          <div className="glass-effect p-6 rounded-xl relative bg-[#0a0b1a]">
+            <div className="spotlight"></div>
+            <h2 className="text-2xl font-bold mb-4 text-white">
+              Attendance Summary
+            </h2>
+            <pre className="bg-[#0a0b1a] backdrop-blur-md p-4 rounded-lg font-mono text-sm text-white/90 overflow-x-auto">
+              {attendanceSummary}
+            </pre>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 relative">
-                {[
-                  { label: "Copy Summary", onClick: copyToClipboard, icon: "clipboard", className: "button-copy" },
-                  { label: "Save to Database", onClick: saveToDatabase, icon: "save", className: "button-save" },
-                  { label: "Share on WhatsApp", onClick: shareOnWhatsApp, icon: "share", className: "button-share" },
-                  { label: "View History", onClick: () => navigate('/login/history'), icon: "history", className: "button-view" }
-                ].map(({ label, onClick, icon, className }) => (
-                  <div key={label} className="relative">
-                    <motion.button
-                      whileHover={{ scale: 1.02, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={onClick}
-                      className={`${className} text-white px-6 py-3 rounded-lg font-medium hover-glow w-full
-                        flex items-center justify-center gap-2`}
-                    >
-                      <span>{label}</span>
-                    </motion.button>
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 relative">
+              {[
+                { label: "Copy Summary", onClick: copyToClipboard, icon: "clipboard", className: "bg-[#0f1225] hover:bg-[#161938] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200" },
+                { label: "Save to Database", onClick: saveToDatabase, icon: "save", className: "bg-[#0f1225] hover:bg-[#161938] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200" },
+                { label: "Share on WhatsApp", onClick: shareOnWhatsApp, icon: "share", className: "bg-[#0f1225] hover:bg-[#161938] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200" },
+                { label: "View History", onClick: () => navigate('/login/history'), icon: "history", className: "bg-[#0f1225] hover:bg-[#161938] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200" }
+              ].map(({ label, onClick, className }) => (
+                <div key={label} className="relative">
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={onClick}
+                    className={`${className} w-full flex items-center justify-center gap-2`}
+                  >
+                    <span>{label}</span>
+                  </motion.button>
+                </div>
+              ))}
             </div>
           </div>
         </motion.div>
@@ -453,7 +453,7 @@ Have a Very Nice Day`;
             exit={{ opacity: 0, y: 50 }}
             className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
           >
-            <div className="glass-effect px-6 py-4 rounded-xl border-2 border-white/10 shadow-2xl backdrop-blur-xl min-w-[300px] bg-[#0f172a]">
+            <div className="glass-effect px-6 py-4 rounded-xl shadow-2xl backdrop-blur-xl min-w-[300px] bg-[#0a0b1a]">
               <div className="flex items-center gap-3">
                 {notification.type === 'success' ? (
                   <div className={`w-10 h-10 rounded-full ${

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import './styles.css';
 const API_URL = import.meta.env.VITE_API_URL;
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -69,6 +69,22 @@ const Attendance = () => {
     isOpen: false,
     recordId: null
   });
+
+  // Add mouse position state
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Add smooth spring animation
+  const springConfig = { damping: 30, stiffness: 200 };
+  const spotlightX = useSpring(mouseX, springConfig);
+  const spotlightY = useSpring(mouseY, springConfig);
+
+  // Handle mouse move for the entire page
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { clientX, clientY } = e;
+    mouseX.set(clientX);
+    mouseY.set(clientY);
+  };
 
   // Update chart colors to match new theme
   const chartColors = {
@@ -388,7 +404,7 @@ const Attendance = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="border-b border-gray-800/30"
+                  className="border-b border-[#0c0720]/90 hover:bg-[#0c0720]/95 transition-colors backdrop-blur-sm"
                 >
                   <td className="py-2 px-2 text-gray-300 whitespace-nowrap">
                     {new Date(record.date).toLocaleDateString('en-GB')}
@@ -446,7 +462,39 @@ const Attendance = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#0f0f1a] bg-mesh p-4 sm:p-6">
+    <div className="min-h-screen w-full bg-[#020208] bg-mesh p-4 sm:p-6 relative overflow-hidden starry-background"
+      onMouseMove={handleMouseMove}>
+      <div className="stars"></div>
+      <div className="stars2"></div>
+      <div className="stars3"></div>
+      <div className="stars4"></div>
+
+      <motion.div
+        className="pointer-events-none fixed inset-0"
+        style={{
+          background: "radial-gradient(600px circle at var(--x) var(--y), rgba(139, 92, 246, 0.15), transparent 40%)",
+          x: spotlightX,
+          y: spotlightY,
+        }}
+        animate={{
+          '--x': spotlightX,
+          '--y': spotlightY,
+        } as any}
+      />
+      
+      <motion.div
+        className="pointer-events-none fixed inset-0"
+        style={{
+          background: "radial-gradient(800px circle at var(--x) var(--y), rgba(99, 102, 241, 0.12), transparent 40%)",
+          x: spotlightX,
+          y: spotlightY,
+        }}
+        animate={{
+          '--x': spotlightX,
+          '--y': spotlightY,
+        } as any}
+      />
+
       {/* Header with navigation buttons */}
       <div className="flex justify-end items-center gap-4 mb-6">
               <button
@@ -519,7 +567,7 @@ const Attendance = () => {
             className="w-full max-w-md mx-4"
           >
             <div className="gradient-border">
-              <div className="glass-effect p-6 rounded-xl relative">
+              <div className="glass-effect p-6 rounded-xl relative bg-[#020617]/95">
                 <div className="spotlight"></div>
                 <h3 className="text-xl font-medium text-gradient mb-4">Delete Attendance Record</h3>
                 <p className="text-gray-300 mb-6">Are you sure you want to delete this attendance record? This action cannot be undone.</p>
@@ -557,52 +605,53 @@ const Attendance = () => {
 
         <div className="mb-6 space-y-4">
           <div className="gradient-border">
-            <div className="glass-effect p-6 rounded-xl relative">
+            <div className="glass-effect p-6 rounded-xl relative bg-[#020208]/95 backdrop-blur-md">
               <div className="spotlight"></div>
               <form onSubmit={handleDateSearch} className="flex gap-4 items-end flex-wrap">
                 <div className="flex-1 min-w-[200px]">
                   <label className="block text-indigo-300 text-sm font-medium mb-2">
-                Search by Date
-              </label>
-              <input
-                type="date"
-                value={searchDate}
-                onChange={(e) => setSearchDate(e.target.value)}
-                    className="w-full bg-[#11111b]/50 text-white border border-indigo-500/20 rounded-lg px-4 py-2
-                      focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
-              />
-            </div>
-            <button
-              type="submit"
-                  className="button-gradient text-white px-6 py-2 rounded-lg hover-glow whitespace-nowrap"
-            >
-              Search Date
-            </button>
-          </form>
+                    Search by Date
+                  </label>
+                  <input
+                    type="date"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
+                    className="w-full bg-[#020208]/95 text-white rounded-lg px-4 py-2
+                      focus:outline-none focus:ring-2 focus:ring-[#1a103f]/60 transition-all backdrop-blur-sm"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-[#020208]/95 text-white px-6 py-2 rounded-lg
+                    hover:bg-[#1a103f]/95 transition-all duration-200 backdrop-blur-sm"
+                >
+                  Search Date
+                </button>
+              </form>
 
               <div className="mt-4 flex gap-4 items-end flex-wrap">
                 <div className="flex-1 min-w-[200px]">
                   <label className="block text-indigo-300 text-sm font-medium mb-2">
-                Search by Student Name
-              </label>
-              <input
-                type="text"
-                value={searchName}
-                onChange={handleNameSearch}
-                placeholder="Enter student name..."
-                    className="w-full bg-[#11111b]/50 text-white border border-indigo-500/20 rounded-lg px-4 py-2
-                      focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all
+                    Search by Student Name
+                  </label>
+                  <input
+                    type="text"
+                    value={searchName}
+                    onChange={handleNameSearch}
+                    placeholder="Enter student name..."
+                    className="w-full bg-[#020208]/95 text-white rounded-lg px-4 py-2
+                      focus:outline-none focus:ring-2 focus:ring-[#1a103f]/60 transition-all backdrop-blur-sm
                       placeholder-indigo-300/50"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={handleReset}
-                  className="bg-[#11111b]/50 text-indigo-300 border border-indigo-500/20 px-6 py-2 rounded-lg 
-                    hover:bg-indigo-500/20 transition-all duration-200"
-            >
-              Reset All
-            </button>
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="bg-[#020208]/95 text-white px-6 py-2 rounded-lg
+                    hover:bg-[#1a103f]/95 transition-all duration-200 backdrop-blur-sm"
+                >
+                  Reset All
+                </button>
               </div>
             </div>
           </div>
@@ -625,9 +674,9 @@ const Attendance = () => {
             animate={{ opacity: 1, y: 0 }}
             className="gradient-border"
           >
-            <div className="glass-effect p-6 rounded-xl text-center">
+            <div className="glass-effect p-6 rounded-xl text-center bg-[#020208]/40 backdrop-blur-md">
               <p className="text-red-400">{error}</p>
-          </div>
+            </div>
           </motion.div>
         ) : (
           <>
@@ -637,7 +686,7 @@ const Attendance = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="gradient-border mb-6"
               >
-                <div className="glass-effect p-6 rounded-xl relative">
+                <div className="glass-effect p-6 rounded-xl relative bg-[#020208]/95 backdrop-blur-md">
                   <div className="spotlight"></div>
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                     <div>
@@ -648,7 +697,7 @@ const Attendance = () => {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="w-full max-w-[300px] mx-auto bg-gray-900/50 p-4 rounded-lg">
+                    <div className="w-full max-w-[300px] mx-auto bg-[#020617]/95 p-4 rounded-lg">
                       {renderPieChart(
                         [
                           studentSummary.presentCount,
@@ -670,7 +719,7 @@ const Attendance = () => {
                         { label: 'On Duty', count: studentSummary.odCount, color: chartColors.od },
                         { label: 'Late', count: studentSummary.lateCount, color: chartColors.late }
                       ].map(({ label, count, color }) => (
-                        <div key={label} className="glass-effect p-4 rounded-lg">
+                        <div key={label} className="glass-effect p-4 rounded-lg bg-[#020617]/95">
                           <p className="text-sm text-indigo-300">{label}</p>
                           <p className="text-xl" style={{ color }}>{count}</p>
                         </div>
@@ -680,22 +729,22 @@ const Attendance = () => {
 
                   <div className="mt-6">
                     <h4 className="text-lg font-medium text-white mb-4">Attendance History</h4>
-                    <div className="glass-effect p-4 rounded-lg overflow-x-auto">
+                    <div className="glass-effect p-4 rounded-lg overflow-x-auto bg-[#020208]/95 backdrop-blur-md">
                       <table className="w-full text-left">
                         <thead>
-                          <tr className="border-b border-gray-700/30">
+                          <tr>
                             <th className="py-2 px-2 text-gray-400 w-[30%]">Date</th>
                             <th className="py-2 px-2 text-gray-400 w-[70%]">Status</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="bg-[#020208]/95 backdrop-blur-md">
                           {studentSummary.attendanceDates.map((record, index) => (
                             <motion.tr
                               key={index}
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: index * 0.05 }}
-                              className="border-b border-gray-800/30"
+                              className="hover:bg-[#1a103f]/95 transition-colors backdrop-blur-sm"
                             >
                               <td className="py-2 px-2 text-gray-300 whitespace-nowrap">
                                 {new Date(record.date).toLocaleDateString('en-GB')}
@@ -731,7 +780,7 @@ const Attendance = () => {
                     transition={{ delay: index * 0.1 }}
                     className="gradient-border"
                   >
-                    <div className="glass-effect p-6 rounded-xl relative">
+                    <div className="glass-effect p-6 rounded-xl relative bg-[#020208]/95 backdrop-blur-md">
                       <div className="spotlight"></div>
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h3 className="text-xl font-medium text-gradient">
@@ -746,7 +795,7 @@ const Attendance = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="w-full max-w-[300px] mx-auto bg-gray-900/50 p-4 rounded-lg">
+                        <div className="w-full max-w-[300px] mx-auto bg-[#020617]/95 p-4 rounded-lg">
                         {renderPieChart(
                           [
                             record.presentCount,
@@ -801,22 +850,22 @@ const Attendance = () => {
                             Close
                           </button>
                         </div>
-                          <div className="glass-effect p-4 rounded-lg overflow-x-auto">
+                          <div className="glass-effect p-4 rounded-lg overflow-x-auto bg-[#020208]/95 backdrop-blur-md">
                             <table className="w-full text-left">
                               <thead>
-                                <tr className="border-b border-gray-700/30">
+                                <tr>
                                   <th className="py-2 px-2 text-gray-400 w-[25%]">Roll No</th>
                                   <th className="py-2 px-2 text-gray-400 w-[45%]">Name</th>
                                   <th className="py-2 px-2 text-gray-400 w-[30%]">Status</th>
                                 </tr>
                               </thead>
-                              <tbody>
+                              <tbody className="bg-[#020208]/95 backdrop-blur-md">
                                 {getFilteredStudentsByStatus(record).map((student) => (
                                   <motion.tr
                                     key={student.studentId}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    className="border-b border-gray-800/30"
+                                    className="hover:bg-[#1a103f]/95 transition-colors backdrop-blur-sm"
                                   >
                                     <td className="py-2 px-2 text-gray-300 whitespace-nowrap">{student.rollNo}</td>
                                     <td className="py-2 px-2 text-gray-300 truncate max-w-[200px]">{student.name}</td>

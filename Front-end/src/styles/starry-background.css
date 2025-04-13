@@ -1,0 +1,87 @@
+.starry-background {
+  background: radial-gradient(ellipse at bottom, #0a0b1a 0%, #000000 100%);
+  overflow: hidden;
+}
+
+@keyframes animStar {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2000px);
+  }
+}
+
+.stars {
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: 1744px 122px rgba(255, 255, 255, 0.8),134px 1321px rgba(255, 255, 255, 0.8),1882px 812px rgba(255, 255, 255, 0.8),622px 1439px rgba(255, 255, 255, 0.8),918px 232px rgba(255, 255, 255, 0.8),1872px 1259px rgba(255, 255, 255, 0.8),1726px 1672px rgba(255, 255, 255, 0.8),757px 1920px rgba(255, 255, 255, 0.8),1237px 1915px rgba(255, 255, 255, 0.8),1859px 1789px rgba(255, 255, 255, 0.8),1017px 1097px rgba(255, 255, 255, 0.8),1087px 1077px rgba(255, 255, 255, 0.8),1526px 1292px rgba(255, 255, 255, 0.8),1006px 1113px rgba(255, 255, 255, 0.8),1051px 1431px rgba(255, 255, 255, 0.8),1381px 1921px rgba(255, 255, 255, 0.8),1404px 125px rgba(255, 255, 255, 0.8),546px 936px rgba(255, 255, 255, 0.8),1094px 475px rgba(255, 255, 255, 0.8),1467px 1447px rgba(255, 255, 255, 0.8);
+  animation: animStar 50s linear infinite;
+}
+
+.stars:after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: 1744px 122px rgba(255, 255, 255, 0.8),134px 1321px rgba(255, 255, 255, 0.8),1882px 812px rgba(255, 255, 255, 0.8),622px 1439px rgba(255, 255, 255, 0.8),918px 232px rgba(255, 255, 255, 0.8),1872px 1259px rgba(255, 255, 255, 0.8),1726px 1672px rgba(255, 255, 255, 0.8),757px 1920px rgba(255, 255, 255, 0.8),1237px 1915px rgba(255, 255, 255, 0.8),1859px 1789px rgba(255, 255, 255, 0.8),1017px 1097px rgba(255, 255, 255, 0.8),1087px 1077px rgba(255, 255, 255, 0.8),1526px 1292px rgba(255, 255, 255, 0.8),1006px 1113px rgba(255, 255, 255, 0.8),1051px 1431px rgba(255, 255, 255, 0.8),1381px 1921px rgba(255, 255, 255, 0.8),1404px 125px rgba(255, 255, 255, 0.8),546px 936px rgba(255, 255, 255, 0.8),1094px 475px rgba(255, 255, 255, 0.8),1467px 1447px rgba(255, 255, 255, 0.8);
+}
+
+.stars2 {
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow: 1267px 497px rgba(255, 255, 255, 0.9),1839px 919px rgba(255, 255, 255, 0.9),1827px 1533px rgba(255, 255, 255, 0.9),1593px 1340px rgba(255, 255, 255, 0.9),1521px 966px rgba(255, 255, 255, 0.9),1899px 1012px rgba(255, 255, 255, 0.9),1456px 1472px rgba(255, 255, 255, 0.9),1145px 1426px rgba(255, 255, 255, 0.9),1033px 557px rgba(255, 255, 255, 0.9),1472px 1842px rgba(255, 255, 255, 0.9),1715px 1888px rgba(255, 255, 255, 0.9),1947px 1785px rgba(255, 255, 255, 0.9),1965px 526px rgba(255, 255, 255, 0.9),1932px 1068px rgba(255, 255, 255, 0.9),1615px 1879px rgba(255, 255, 255, 0.9),1933px 1055px rgba(255, 255, 255, 0.9),1554px 1936px rgba(255, 255, 255, 0.9),1642px 1150px rgba(255, 255, 255, 0.9),1667px 1826px rgba(255, 255, 255, 0.9),1838px 1967px rgba(255, 255, 255, 0.9);
+  animation: animStar 100s linear infinite;
+}
+
+.stars2:after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  box-shadow: 1267px 497px rgba(255, 255, 255, 0.9),1839px 919px rgba(255, 255, 255, 0.9),1827px 1533px rgba(255, 255, 255, 0.9),1593px 1340px rgba(255, 255, 255, 0.9),1521px 966px rgba(255, 255, 255, 0.9),1899px 1012px rgba(255, 255, 255, 0.9),1456px 1472px rgba(255, 255, 255, 0.9),1145px 1426px rgba(255, 255, 255, 0.9),1033px 557px rgba(255, 255, 255, 0.9),1472px 1842px rgba(255, 255, 255, 0.9),1715px 1888px rgba(255, 255, 255, 0.9),1947px 1785px rgba(255, 255, 255, 0.9),1965px 526px rgba(255, 255, 255, 0.9),1932px 1068px rgba(255, 255, 255, 0.9),1615px 1879px rgba(255, 255, 255, 0.9),1933px 1055px rgba(255, 255, 255, 0.9),1554px 1936px rgba(255, 255, 255, 0.9),1642px 1150px rgba(255, 255, 255, 0.9),1667px 1826px rgba(255, 255, 255, 0.9),1838px 1967px rgba(255, 255, 255, 0.9);
+}
+
+.stars3 {
+  width: 3px;
+  height: 3px;
+  background: transparent;
+  box-shadow: 387px 1878px rgba(255, 255, 255, 1),760px 1564px rgba(255, 255, 255, 1),1487px 999px rgba(255, 255, 255, 1),948px 1828px rgba(255, 255, 255, 1),1977px 1001px rgba(255, 255, 255, 1),1284px 1963px rgba(255, 255, 255, 1),656px 284px rgba(255, 255, 255, 1),1268px 1635px rgba(255, 255, 255, 1),1820px 598px rgba(255, 255, 255, 1),642px 1900px rgba(255, 255, 255, 1),296px 57px rgba(255, 255, 255, 1),921px 1620px rgba(255, 255, 255, 1),476px 1858px rgba(255, 255, 255, 1),658px 613px rgba(255, 255, 255, 1);
+  animation: animStar 150s linear infinite;
+}
+
+.stars3:after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: 3px;
+  height: 3px;
+  background: transparent;
+  box-shadow: 387px 1878px rgba(255, 255, 255, 1),760px 1564px rgba(255, 255, 255, 1),1487px 999px rgba(255, 255, 255, 1),948px 1828px rgba(255, 255, 255, 1),1977px 1001px rgba(255, 255, 255, 1),1284px 1963px rgba(255, 255, 255, 1),656px 284px rgba(255, 255, 255, 1),1268px 1635px rgba(255, 255, 255, 1),1820px 598px rgba(255, 255, 255, 1),642px 1900px rgba(255, 255, 255, 1),296px 57px rgba(255, 255, 255, 1),921px 1620px rgba(255, 255, 255, 1),476px 1858px rgba(255, 255, 255, 1),658px 613px rgba(255, 255, 255, 1);
+}
+
+.stars4 {
+  width: 4px;
+  height: 4px;
+  background: transparent;
+  box-shadow: 387px 1878px rgba(255, 255, 255, 1),760px 1564px rgba(255, 255, 255, 1),1487px 999px rgba(255, 255, 255, 1),948px 1828px rgba(255, 255, 255, 1),1977px 1001px rgba(255, 255, 255, 1),1284px 1963px rgba(255, 255, 255, 1),656px 284px rgba(255, 255, 255, 1);
+  animation: animStar 200s linear infinite;
+  opacity: 1;
+}
+
+.stars4:after {
+  content: " ";
+  position: absolute;
+  top: 2000px;
+  width: 4px;
+  height: 4px;
+  background: transparent;
+  box-shadow: 387px 1878px rgba(255, 255, 255, 1),760px 1564px rgba(255, 255, 255, 1),1487px 999px rgba(255, 255, 255, 1),948px 1828px rgba(255, 255, 255, 1),1977px 1001px rgba(255, 255, 255, 1),1284px 1963px rgba(255, 255, 255, 1),656px 284px rgba(255, 255, 255, 1);
+  opacity: 1;
+} 
