@@ -1,6 +1,7 @@
 .starry-background {
-  background: radial-gradient(ellipse at bottom, #0a0b1a 0%, #000000 100%);
+  background: radial-gradient(ellipse at bottom, #050517 0%, #000000 100%);
   overflow: hidden;
+  z-index: 0;
 }
 
 @keyframes animStar {
@@ -70,7 +71,7 @@
   width: 4px;
   height: 4px;
   background: transparent;
-  box-shadow: 387px 1878px rgba(255, 255, 255, 1),760px 1564px rgba(255, 255, 255, 1),1487px 999px rgba(255, 255, 255, 1),948px 1828px rgba(255, 255, 255, 1),1977px 1001px rgba(255, 255, 255, 1),1284px 1963px rgba(255, 255, 255, 1),656px 284px rgba(255, 255, 255, 1);
+  box-shadow: 387px 1878px rgba(255, 255, 255, 1),760px 1564px rgba(255, 255, 255, 1),1487px 999px rgba(255, 255, 255, 1),948px 1828px rgba(255, 255, 255, 1),1977px 1001px rgba(255, 255, 255, 1),1284px 1963px rgba(255, 255, 255, 1),656px 284px rgba(255, 255, 255, 1),1456px 572px rgba(255, 255, 255, 1),1987px 301px rgba(255, 255, 255, 1),324px 1214px rgba(255, 255, 255, 1),743px 492px rgba(255, 255, 255, 1),528px 1785px rgba(255, 255, 255, 1);
   animation: animStar 200s linear infinite;
   opacity: 1;
 }
@@ -82,6 +83,6 @@
   width: 4px;
   height: 4px;
   background: transparent;
-  box-shadow: 387px 1878px rgba(255, 255, 255, 1),760px 1564px rgba(255, 255, 255, 1),1487px 999px rgba(255, 255, 255, 1),948px 1828px rgba(255, 255, 255, 1),1977px 1001px rgba(255, 255, 255, 1),1284px 1963px rgba(255, 255, 255, 1),656px 284px rgba(255, 255, 255, 1);
+  box-shadow: 387px 1878px rgba(255, 255, 255, 1),760px 1564px rgba(255, 255, 255, 1),1487px 999px rgba(255, 255, 255, 1),948px 1828px rgba(255, 255, 255, 1),1977px 1001px rgba(255, 255, 255, 1),1284px 1963px rgba(255, 255, 255, 1),656px 284px rgba(255, 255, 255, 1),1456px 572px rgba(255, 255, 255, 1),1987px 301px rgba(255, 255, 255, 1),324px 1214px rgba(255, 255, 255, 1),743px 492px rgba(255, 255, 255, 1),528px 1785px rgba(255, 255, 255, 1);
   opacity: 1;
 } 

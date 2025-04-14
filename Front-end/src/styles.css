@@ -380,4 +380,30 @@ th, td {
 
 .toast-exit {
   animation: toast-slide-out 0.4s ease-in forwards;
+}
+
+/* Add transparent version of gradient border */
+.gradient-border-transparent {
+  position: relative;
+  background: transparent;
+  border-radius: 1rem;
+  padding: 1px;
+}
+
+.gradient-border-transparent::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  padding: 1px;
+  background: var(--accent-gradient);
+  opacity: 0.3;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 } 

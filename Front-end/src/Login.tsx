@@ -48,18 +48,18 @@ const Login = () => {
 
   return (
     <div 
-      className="min-h-screen w-full bg-[#0a0b1a] bg-mesh p-4 relative overflow-hidden starry-background"
+      className="min-h-screen w-full p-4 relative overflow-hidden starry-background"
       onMouseMove={handleMouseMove}
     >
-      <div className="stars"></div>
-      <div className="stars2"></div>
-      <div className="stars3"></div>
-      <div className="stars4"></div>
+      <div className="stars z-0"></div>
+      <div className="stars2 z-0"></div>
+      <div className="stars3 z-0"></div>
+      <div className="stars4 z-0"></div>
 
       <motion.div
         className="pointer-events-none fixed inset-0"
         style={{
-          background: "radial-gradient(600px circle at var(--x) var(--y), rgba(139, 92, 246, 0.07), transparent 40%)",
+          background: "radial-gradient(600px circle at var(--x) var(--y), rgba(139, 92, 246, 0.05), transparent 40%)",
           x: spotlightX,
           y: spotlightY,
         }}
@@ -72,7 +72,7 @@ const Login = () => {
       <motion.div
         className="pointer-events-none fixed inset-0"
         style={{
-          background: "radial-gradient(800px circle at var(--x) var(--y), rgba(99, 102, 241, 0.05), transparent 40%)",
+          background: "radial-gradient(800px circle at var(--x) var(--y), rgba(99, 102, 241, 0.03), transparent 40%)",
           x: spotlightX,
           y: spotlightY,
         }}
@@ -82,15 +82,15 @@ const Login = () => {
         } as any}
       />
 
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen z-10 relative">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
           className="w-full max-w-md mx-4"
         >
-          <div className="gradient-border">
-            <div className="glass-effect p-8 rounded-xl relative bg-[#0a0b1a]/95 backdrop-blur-md">
+          <div className="gradient-border-transparent">
+            <div className="p-8 rounded-xl relative">
               <div className="spotlight"></div>
               
               <motion.div
@@ -102,7 +102,7 @@ const Login = () => {
                 <h1 className="text-3xl font-bold mb-2 text-white">
                   Login
                 </h1>
-                <p className="text-indigo-300/50">
+                <p className="text-gray-400">
                   Please sign in to continue
                 </p>
               </motion.div>
@@ -113,16 +113,16 @@ const Login = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <label className="block text-indigo-300/70 text-sm font-medium mb-2">
+                  <label className="block text-gray-300 text-sm font-medium mb-2">
                     Username
                   </label>
                   <input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full bg-[#0a0b1a]/95 text-white rounded-lg px-4 py-3
-                      border border-[#1a103f]/30 focus:outline-none focus:ring-2 focus:ring-[#1a103f]/30 
-                      transition-all backdrop-blur-sm placeholder-indigo-300/30"
+                    className="w-full bg-transparent text-white rounded-lg px-4 py-3
+                      border border-gray-800/30 focus:outline-none focus:ring-1 focus:ring-gray-700 
+                      transition-all placeholder-gray-500"
                     placeholder="Enter your username"
                     required
                   />
@@ -133,16 +133,16 @@ const Login = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <label className="block text-indigo-300/70 text-sm font-medium mb-2">
+                  <label className="block text-gray-300 text-sm font-medium mb-2">
                     Password
                   </label>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-[#0a0b1a]/95 text-white rounded-lg px-4 py-3
-                      border border-[#1a103f]/30 focus:outline-none focus:ring-2 focus:ring-[#1a103f]/30 
-                      transition-all backdrop-blur-sm placeholder-indigo-300/30"
+                    className="w-full bg-transparent text-white rounded-lg px-4 py-3
+                      border border-gray-800/30 focus:outline-none focus:ring-1 focus:ring-gray-700 
+                      transition-all placeholder-gray-500"
                     placeholder="Enter your password"
                     required
                   />
@@ -152,7 +152,7 @@ const Login = () => {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-[#0a0b1a]/95 border border-red-500/20 rounded-lg p-3 text-red-400/80 text-sm text-center backdrop-blur-sm"
+                    className="border border-red-500/20 rounded-lg p-3 text-red-400 text-sm text-center"
                   >
                     {error}
                   </motion.div>
@@ -166,9 +166,9 @@ const Login = () => {
                 >
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-indigo-500/10 to-purple-500/10 text-white py-3 rounded-lg font-medium
-                      hover:from-indigo-500/20 hover:to-purple-500/20 transition-all duration-200 backdrop-blur-sm
-                      border border-indigo-500/20 hover:border-indigo-500/30"
+                    className="w-full bg-transparent text-white py-3 rounded-lg font-medium
+                      hover:bg-gray-800/20 transition-all duration-200
+                      border border-gray-700/30"
                   >
                     Login
                   </button>
@@ -176,9 +176,9 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => navigate('/')}
-                    className="w-full bg-[#0a0b1a]/95 text-white/80 py-3 rounded-lg font-medium
-                      hover:bg-[#0a0b1a]/90 transition-all duration-200 backdrop-blur-sm
-                      border border-[#1a103f]/30 hover:border-[#1a103f]/40"
+                    className="w-full bg-transparent text-white/80 py-3 rounded-lg font-medium
+                      hover:bg-gray-800/20 transition-all duration-200
+                      border border-gray-700/30"
                   >
                     Back to Dashboard
                   </button>

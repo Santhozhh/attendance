@@ -241,7 +241,9 @@ Have a Very Nice Day`;
       <div className="flex justify-end items-center gap-4 mb-6">
         <button
           onClick={handleLogout}
-          className="button-gradient text-white px-6 py-2 rounded-lg hover-glow whitespace-nowrap"
+          className="bg-gradient-to-r from-violet-900/50 to-pink-900/50 hover:from-violet-800/60 hover:to-pink-800/60 
+          text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 
+          border border-violet-800/30 whitespace-nowrap"
         >
           Logout
         </button>
@@ -426,10 +428,10 @@ Have a Very Nice Day`;
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 relative">
               {[
-                { label: "Copy Summary", onClick: copyToClipboard, icon: "clipboard", className: "bg-[#0f1225] hover:bg-[#161938] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200" },
-                { label: "Save to Database", onClick: saveToDatabase, icon: "save", className: "bg-[#0f1225] hover:bg-[#161938] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200" },
-                { label: "Share on WhatsApp", onClick: shareOnWhatsApp, icon: "share", className: "bg-[#0f1225] hover:bg-[#161938] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200" },
-                { label: "View History", onClick: () => navigate('/login/history'), icon: "history", className: "bg-[#0f1225] hover:bg-[#161938] text-white px-6 py-3 rounded-lg font-medium transition-all duration-200" }
+                { label: "Copy Summary", onClick: copyToClipboard, icon: "clipboard", className: "bg-gradient-to-r from-indigo-900/50 to-purple-900/50 hover:from-indigo-800/60 hover:to-purple-800/60 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-indigo-800/30" },
+                { label: "Save to Database", onClick: saveToDatabase, icon: "save", className: "bg-gradient-to-r from-blue-900/50 to-cyan-900/50 hover:from-blue-800/60 hover:to-cyan-800/60 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-blue-800/30" },
+                { label: "Share on WhatsApp", onClick: shareOnWhatsApp, icon: "share", className: "bg-gradient-to-r from-emerald-900/50 to-green-900/50 hover:from-emerald-800/60 hover:to-green-800/60 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-emerald-800/30" },
+                { label: "View History", onClick: () => navigate('/login/history'), icon: "history", className: "bg-gradient-to-r from-violet-900/50 to-pink-900/50 hover:from-violet-800/60 hover:to-pink-800/60 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-violet-800/30" }
               ].map(({ label, onClick, className }) => (
                 <div key={label} className="relative">
                   <motion.button

@@ -334,10 +334,11 @@ const Attendance = () => {
   };
 
   const renderStudentSummary = (summary: StudentSummary) => (
-    <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-pink-500/20 mb-6">
+    <div className="p-6 rounded-xl relative">
+      <div className="spotlight"></div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
-          <h3 className="text-xl font-medium text-gray-200 mb-2">{summary.name}</h3>
+          <h3 className="text-xl font-medium text-gradient mb-2">{summary.name}</h3>
           <p className="text-gray-400">Roll No: {summary.rollNo}</p>
           <p className="text-gray-400 mt-1">
             Total Days (Excluding Internal OD): {summary.totalDays}
@@ -349,7 +350,7 @@ const Attendance = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="w-full max-w-[300px] mx-auto">
+        <div className="w-full max-w-[300px] mx-auto p-4 rounded-lg">
           {renderPieChart(
             [
               summary.presentCount,
@@ -389,7 +390,7 @@ const Attendance = () => {
 
       <div className="mt-6">
         <h4 className="text-lg font-medium mb-4 text-white">Attendance story</h4>
-        <div className="bg-gray-900 p-4 rounded-lg overflow-x-auto">
+        <div className="p-4 rounded-lg overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-gray-700/30">
@@ -397,14 +398,14 @@ const Attendance = () => {
                 <th className="py-2 px-2 text-gray-400 w-[70%]">Status</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-transparent">
               {summary.attendanceDates.map((record, index) => (
                 <motion.tr
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="border-b border-[#0c0720]/90 hover:bg-[#0c0720]/95 transition-colors backdrop-blur-sm"
+                  className="hover:bg-gray-800/10 transition-colors"
                 >
                   <td className="py-2 px-2 text-gray-300 whitespace-nowrap">
                     {new Date(record.date).toLocaleDateString('en-GB')}
@@ -462,7 +463,7 @@ const Attendance = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#020208] bg-mesh p-4 sm:p-6 relative overflow-hidden starry-background"
+    <div className="min-h-screen w-full bg-transparent p-4 sm:p-6 relative overflow-hidden starry-background"
       onMouseMove={handleMouseMove}>
       <div className="stars"></div>
       <div className="stars2"></div>
@@ -472,7 +473,7 @@ const Attendance = () => {
       <motion.div
         className="pointer-events-none fixed inset-0"
         style={{
-          background: "radial-gradient(600px circle at var(--x) var(--y), rgba(139, 92, 246, 0.15), transparent 40%)",
+          background: "radial-gradient(600px circle at var(--x) var(--y), rgba(139, 92, 246, 0.05), transparent 40%)",
           x: spotlightX,
           y: spotlightY,
         }}
@@ -485,7 +486,7 @@ const Attendance = () => {
       <motion.div
         className="pointer-events-none fixed inset-0"
         style={{
-          background: "radial-gradient(800px circle at var(--x) var(--y), rgba(99, 102, 241, 0.12), transparent 40%)",
+          background: "radial-gradient(800px circle at var(--x) var(--y), rgba(99, 102, 241, 0.03), transparent 40%)",
           x: spotlightX,
           y: spotlightY,
         }}
@@ -499,14 +500,15 @@ const Attendance = () => {
       <div className="flex justify-end items-center gap-4 mb-6">
               <button
           onClick={() => navigate('/')}
-          className="bg-[#11111b]/50 text-indigo-300 border border-indigo-500/20 px-4 py-2 rounded-lg 
-            hover:bg-indigo-500/20 transition-all duration-200"
+          className="bg-transparent text-gray-300 border border-gray-700/30 px-4 py-2 rounded-lg 
+            hover:bg-gray-800/20 transition-all duration-200"
               >
           Back to Dashboard
               </button>
               <button
           onClick={handleLogout}
-          className="button-gradient text-white px-6 py-2 rounded-lg hover-glow whitespace-nowrap"
+          className="bg-transparent text-white border border-gray-700/30 px-6 py-2 rounded-lg 
+            hover:bg-gray-800/20 transition-all duration-200"
               >
           Exit History
               </button>
@@ -566,26 +568,30 @@ const Attendance = () => {
             exit={{ opacity: 0, scale: 0.9 }}
             className="w-full max-w-md mx-4"
           >
-            <div className="gradient-border">
+            <div className="gradient-border-transparent">
               <div className="glass-effect p-6 rounded-xl relative bg-[#020617]/95">
-                <div className="spotlight"></div>
-                <h3 className="text-xl font-medium text-gradient mb-4">Delete Attendance Record</h3>
-                <p className="text-gray-300 mb-6">Are you sure you want to delete this attendance record? This action cannot be undone.</p>
-          <div className="flex gap-4">
-            <button
-                    onClick={() => setDeleteConfirmation({ isOpen: false, recordId: null })}
-                    className="flex-1 bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 px-4 py-2 rounded-lg transition-all duration-200"
-            >
-                    Cancel
-            </button>
-            <button
-                    onClick={confirmDelete}
-                    className="flex-1 button-gradient text-white px-4 py-2 rounded-lg hover-glow"
-            >
-                    Delete
-            </button>
-          </div>
-        </div>
+                <div className="p-6 rounded-xl relative bg-transparent">
+                  <div className="spotlight"></div>
+                  <h3 className="text-xl font-medium text-gradient mb-4">Delete Attendance Record</h3>
+                  <p className="text-gray-300 mb-6">Are you sure you want to delete this attendance record? This action cannot be undone.</p>
+                  <div className="flex gap-4">
+                    <button
+                            onClick={() => setDeleteConfirmation({ isOpen: false, recordId: null })}
+                            className="flex-1 bg-transparent hover:bg-gray-800/20 text-gray-300 px-4 py-2 rounded-lg 
+                              transition-all duration-200 border border-gray-700/30"
+                    >
+                            Cancel
+                    </button>
+                    <button
+                            onClick={confirmDelete}
+                            className="flex-1 bg-transparent hover:bg-gray-800/20 text-white px-4 py-2 rounded-lg 
+                              transition-all duration-200 border border-gray-700/30"
+                    >
+                            Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </motion.div>
@@ -604,26 +610,27 @@ const Attendance = () => {
         </motion.div>
 
         <div className="mb-6 space-y-4">
-          <div className="gradient-border">
-            <div className="glass-effect p-6 rounded-xl relative bg-[#020208]/95 backdrop-blur-md">
+          <div className="gradient-border-transparent">
+            <div className="p-6 rounded-xl relative">
               <div className="spotlight"></div>
               <form onSubmit={handleDateSearch} className="flex gap-4 items-end flex-wrap">
                 <div className="flex-1 min-w-[200px]">
-                  <label className="block text-indigo-300 text-sm font-medium mb-2">
+                  <label className="block text-gray-300 text-sm font-medium mb-2">
                     Search by Date
                   </label>
                   <input
                     type="date"
                     value={searchDate}
                     onChange={(e) => setSearchDate(e.target.value)}
-                    className="w-full bg-[#020208]/95 text-white rounded-lg px-4 py-2
-                      focus:outline-none focus:ring-2 focus:ring-[#1a103f]/60 transition-all backdrop-blur-sm"
+                    className="w-full bg-transparent text-gray-300 rounded-lg px-4 py-2
+                      border border-gray-800/30 focus:outline-none focus:ring-1 focus:ring-gray-700 
+                      transition-all"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="bg-[#020208]/95 text-white px-6 py-2 rounded-lg
-                    hover:bg-[#1a103f]/95 transition-all duration-200 backdrop-blur-sm"
+                  className="bg-transparent hover:bg-gray-800/20 text-white px-6 py-2 rounded-lg 
+                  transition-all duration-200 border border-gray-700/30"
                 >
                   Search Date
                 </button>
@@ -631,7 +638,7 @@ const Attendance = () => {
 
               <div className="mt-4 flex gap-4 items-end flex-wrap">
                 <div className="flex-1 min-w-[200px]">
-                  <label className="block text-indigo-300 text-sm font-medium mb-2">
+                  <label className="block text-gray-300 text-sm font-medium mb-2">
                     Search by Student Name
                   </label>
                   <input
@@ -639,16 +646,16 @@ const Attendance = () => {
                     value={searchName}
                     onChange={handleNameSearch}
                     placeholder="Enter student name..."
-                    className="w-full bg-[#020208]/95 text-white rounded-lg px-4 py-2
-                      focus:outline-none focus:ring-2 focus:ring-[#1a103f]/60 transition-all backdrop-blur-sm
-                      placeholder-indigo-300/50"
+                    className="w-full bg-transparent text-gray-300 rounded-lg px-4 py-2
+                      border border-gray-800/30 focus:outline-none focus:ring-1 focus:ring-gray-700 
+                      transition-all placeholder-gray-500"
                   />
                 </div>
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="bg-[#020208]/95 text-white px-6 py-2 rounded-lg
-                    hover:bg-[#1a103f]/95 transition-all duration-200 backdrop-blur-sm"
+                  className="bg-transparent hover:bg-gray-800/20 text-white px-6 py-2 rounded-lg 
+                  transition-all duration-200 border border-gray-700/30"
                 >
                   Reset All
                 </button>
@@ -672,9 +679,9 @@ const Attendance = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="gradient-border"
+            className="gradient-border-transparent"
           >
-            <div className="glass-effect p-6 rounded-xl text-center bg-[#020208]/40 backdrop-blur-md">
+            <div className="p-6 rounded-xl text-center">
               <p className="text-red-400">{error}</p>
             </div>
           </motion.div>
@@ -684,9 +691,9 @@ const Attendance = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="gradient-border mb-6"
+                className="gradient-border-transparent mb-6"
               >
-                <div className="glass-effect p-6 rounded-xl relative bg-[#020208]/95 backdrop-blur-md">
+                <div className="p-6 rounded-xl relative">
                   <div className="spotlight"></div>
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                     <div>
@@ -697,7 +704,7 @@ const Attendance = () => {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="w-full max-w-[300px] mx-auto bg-[#020617]/95 p-4 rounded-lg">
+                    <div className="w-full max-w-[300px] mx-auto p-4 rounded-lg">
                       {renderPieChart(
                         [
                           studentSummary.presentCount,
@@ -719,8 +726,8 @@ const Attendance = () => {
                         { label: 'On Duty', count: studentSummary.odCount, color: chartColors.od },
                         { label: 'Late', count: studentSummary.lateCount, color: chartColors.late }
                       ].map(({ label, count, color }) => (
-                        <div key={label} className="glass-effect p-4 rounded-lg bg-[#020617]/95">
-                          <p className="text-sm text-indigo-300">{label}</p>
+                        <div key={label} className="p-4 rounded-lg">
+                          <p className="text-sm text-gray-300">{label}</p>
                           <p className="text-xl" style={{ color }}>{count}</p>
                         </div>
                       ))}
@@ -729,7 +736,7 @@ const Attendance = () => {
 
                   <div className="mt-6">
                     <h4 className="text-lg font-medium text-white mb-4">Attendance History</h4>
-                    <div className="glass-effect p-4 rounded-lg overflow-x-auto bg-[#020208]/95 backdrop-blur-md">
+                    <div className="p-4 rounded-lg overflow-x-auto">
                       <table className="w-full text-left">
                         <thead>
                           <tr>
@@ -737,14 +744,14 @@ const Attendance = () => {
                             <th className="py-2 px-2 text-gray-400 w-[70%]">Status</th>
                           </tr>
                         </thead>
-                        <tbody className="bg-[#020208]/95 backdrop-blur-md">
+                        <tbody className="bg-transparent">
                           {studentSummary.attendanceDates.map((record, index) => (
                             <motion.tr
                               key={index}
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: index * 0.05 }}
-                              className="hover:bg-[#1a103f]/95 transition-colors backdrop-blur-sm"
+                              className="hover:bg-gray-800/10 transition-colors"
                             >
                               <td className="py-2 px-2 text-gray-300 whitespace-nowrap">
                                 {new Date(record.date).toLocaleDateString('en-GB')}
@@ -778,9 +785,9 @@ const Attendance = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="gradient-border"
+                    className="gradient-border-transparent"
                   >
-                    <div className="glass-effect p-6 rounded-xl relative bg-[#020208]/95 backdrop-blur-md">
+                    <div className="p-6 rounded-xl relative">
                       <div className="spotlight"></div>
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h3 className="text-xl font-medium text-gradient">
@@ -788,14 +795,15 @@ const Attendance = () => {
                       </h3>
                         <button
                           onClick={() => handleDelete(record._id)}
-                        className="button-gradient text-white px-4 py-2 rounded-lg hover-glow"
+                          className="bg-transparent hover:bg-gray-800/20 text-white px-4 py-2 rounded-lg 
+                          transition-all duration-200 border border-gray-700/30"
                         >
                           Delete
                         </button>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="w-full max-w-[300px] mx-auto bg-[#020617]/95 p-4 rounded-lg">
+                        <div className="w-full max-w-[300px] mx-auto p-4 rounded-lg">
                         {renderPieChart(
                           [
                             record.presentCount,
@@ -820,10 +828,10 @@ const Attendance = () => {
                             <button
                               key={label}
                               onClick={() => handleStatusClick(status, record)}
-                              className={`glass-effect p-4 rounded-lg transition-all duration-200 hover:ring-2 hover:ring-indigo-500/50 
-                                ${selectedStatus === status && selectedRecord?._id === record._id ? 'ring-2 ring-indigo-500' : ''}`}
+                              className={`p-4 rounded-lg transition-all duration-200 hover:bg-gray-800/20
+                                ${selectedStatus === status && selectedRecord?._id === record._id ? 'border border-gray-700' : ''}`}
                             >
-                              <p className="text-sm text-indigo-300">{label}</p>
+                              <p className="text-sm text-gray-300">{label}</p>
                               <p className="text-xl" style={{ color }}>{count}</p>
                             </button>
                           ))}
@@ -850,7 +858,7 @@ const Attendance = () => {
                             Close
                           </button>
                         </div>
-                          <div className="glass-effect p-4 rounded-lg overflow-x-auto bg-[#020208]/95 backdrop-blur-md">
+                          <div className="p-4 rounded-lg overflow-x-auto">
                             <table className="w-full text-left">
                               <thead>
                                 <tr>
@@ -859,13 +867,13 @@ const Attendance = () => {
                                   <th className="py-2 px-2 text-gray-400 w-[30%]">Status</th>
                                 </tr>
                               </thead>
-                              <tbody className="bg-[#020208]/95 backdrop-blur-md">
+                              <tbody className="bg-transparent">
                                 {getFilteredStudentsByStatus(record).map((student) => (
                                   <motion.tr
                                     key={student.studentId}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    className="hover:bg-[#1a103f]/95 transition-colors backdrop-blur-sm"
+                                    className="hover:bg-gray-800/10 transition-colors"
                                   >
                                     <td className="py-2 px-2 text-gray-300 whitespace-nowrap">{student.rollNo}</td>
                                     <td className="py-2 px-2 text-gray-300 truncate max-w-[200px]">{student.name}</td>
