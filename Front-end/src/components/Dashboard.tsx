@@ -286,7 +286,7 @@ Have a Very Nice Day`;
           className="text-center mb-8"
         >
           <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-white">
-            Attendance Management III-C
+            Attendance Management IV-C
           </h1>
           <p className="text-lg text-white/70">
             Your gateway to student attendance tracking
